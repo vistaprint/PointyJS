@@ -62,6 +62,11 @@ module.exports = function (grunt) {
                     cwd: "./",
                     src: ["jquery.pointer*.js"],
                     dest: "dist/"
+                }, {
+                    expand: true,
+                    cwd: "./",
+                    src: ["LICENSE"],
+                    dest: "dist/"
                 }]
             },
             distSite: {
