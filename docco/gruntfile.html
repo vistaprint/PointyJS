@@ -1,0 +1,295 @@
+<!DOCTYPE html>  <html> <head>   <title>gruntfile.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="gruntfile.html">                 gruntfile.js               </a>                                           <a class="source" href="jquery.pointerEvents.html">                 jquery.pointerEvents.js               </a>                                           <a class="source" href="jquery.pointerGestures.html">                 jquery.pointerGestures.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs"><a href="../index.html">Home</a> | 
+<a href="https://github.com/vistaprint/PointyJS/blob/master/js/gruntfile.js" target="_blank">View this file on Github</a>
+
+<hr style="height: 1px; border:0; background-color:#4A525A">
+             <h1>               gruntfile.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/* globals module */</span>
+
+<span class="kd">function</span> <span class="nx">renameFn</span><span class="p">(</span><span class="nx">extOld</span><span class="p">,</span> <span class="nx">extNew</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">dest</span><span class="p">,</span> <span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">dest</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">path</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">extOld</span><span class="p">,</span> <span class="nx">extNew</span><span class="p">);</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">pkg</span><span class="o">:</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">readJSON</span><span class="p">(</span><span class="s2">&quot;package.json&quot;</span><span class="p">),</span>
+        <span class="nx">jshint</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">uses_defaults</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;gruntfile.js&quot;</span><span class="p">,</span> <span class="s2">&quot;*.js&quot;</span><span class="p">],</span>
+            <span class="nx">with_overrides</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">jshintrc</span><span class="o">:</span> <span class="s2">&quot;test/.jshintrc&quot;</span>
+                <span class="p">},</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;test/**/*.js&quot;</span><span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">jshintrc</span><span class="o">:</span> <span class="s2">&quot;.jshintrc&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">connect</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">server</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">port</span><span class="o">:</span> <span class="mi">9001</span><span class="p">,</span>
+                    <span class="nx">keepalive</span><span class="o">:</span> <span class="kc">false</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">mocha</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">all</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">urls</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;test/*.unittests.html&quot;</span><span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">reporter</span><span class="o">:</span> <span class="s2">&quot;Spec&quot;</span><span class="p">,</span>
+                <span class="nx">timeout</span><span class="o">:</span> <span class="mi">20000</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">docco</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">javascript</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./*.js&quot;</span><span class="p">],</span>
+                <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./site/_site/docco/&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">mkdir</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">docco</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">create</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./site/_site/docco/&quot;</span><span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">copy</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">distJs</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;./&quot;</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;*.js&quot;</span><span class="p">],</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;dist/&quot;</span>
+                <span class="p">}]</span>
+            <span class="p">},</span>
+            <span class="nx">distSite</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;./dist&quot;</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;**&quot;</span><span class="p">],</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./site/_site/dist/&quot;</span>
+                <span class="p">},</span> <span class="p">{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">flatten</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;LICENSE&quot;</span><span class="p">],</span>
+                    <span class="nx">processFile</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./site/_site/&quot;</span>
+                <span class="p">}]</span>
+            <span class="p">},</span>
+            <span class="nx">doccoFix</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;./site/_docco/&quot;</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;**&quot;</span><span class="p">],</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./site/_site/docco&quot;</span>
+                <span class="p">}]</span>
+            <span class="p">},</span>
+            <span class="nx">deploy</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;./site/_site/&quot;</span><span class="p">,</span>
+                    <span class="nx">flatten</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;**&quot;</span><span class="p">],</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./.git/docs-temp/&quot;</span>
+                <span class="p">}]</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">uglify</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">dist</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;dist&quot;</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;**.js&quot;</span><span class="p">],</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;dist&quot;</span><span class="p">,</span>
+                    <span class="nx">rename</span><span class="o">:</span> <span class="nx">renameFn</span><span class="p">(</span><span class="s2">&quot;.js&quot;</span><span class="p">,</span> <span class="s2">&quot;.min.js&quot;</span><span class="p">)</span>
+                <span class="p">}]</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">clean</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">force</span><span class="o">:</span> <span class="kc">true</span>
+            <span class="p">},</span>
+            <span class="nx">build</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./dist&quot;</span><span class="p">],</span>
+            <span class="nx">deploy</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./.git/docs-temp&quot;</span><span class="p">],</span>
+            <span class="nx">docs</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./site/_site&quot;</span><span class="p">]</span>
+        <span class="p">},</span>
+        <span class="nx">jekyll</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">docs</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="s2">&quot;./site/&quot;</span><span class="p">,</span>
+                    <span class="nx">config</span><span class="o">:</span> <span class="s2">&quot;./site/_config.yml&quot;</span><span class="p">,</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./site/_site&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">compress</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">main</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">archive</span><span class="o">:</span> <span class="s2">&quot;./site/pointyjs.zip&quot;</span>
+                <span class="p">},</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+</pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>includes files in path</p>             </td>             <td class="code">               <div class="highlight"><pre>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;**&quot;</span><span class="p">],</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;./dist&quot;</span><span class="p">,</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="nx">filter</span><span class="o">:</span> <span class="s2">&quot;isFile&quot;</span>
+                <span class="p">}]</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;string-replace&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">site</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;./site/_site/&quot;</span><span class="p">,</span>
+                    <span class="nx">flatten</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;*.html&quot;</span><span class="p">],</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./site/_site/&quot;</span>
+                <span class="p">}],</span>
+                <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">replacements</span><span class="o">:</span> <span class="p">[{</span>
+                        <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/\.\.\/dist\//ig</span><span class="p">,</span>
+                        <span class="nx">replacement</span><span class="o">:</span> <span class="s2">&quot;dist/&quot;</span>
+                    <span class="p">}]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;strip_code&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">options</span><span class="o">:</span> <span class="p">{},</span>
+            <span class="nx">all</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">src</span><span class="o">:</span> <span class="s2">&quot;./dist/**.js&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">watch</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">copyJs</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./*.js&quot;</span><span class="p">],</span>
+                <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;copy:distJs&quot;</span><span class="p">,</span> <span class="s2">&quot;copy:distSite&quot;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="nx">jekyll</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./site/**/*&quot;</span><span class="p">,</span> <span class="s2">&quot;!./site/_site/*&quot;</span><span class="p">],</span>
+                <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;sitePages&quot;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">spawn</span><span class="o">:</span> <span class="kc">false</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">jsbeautifier</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">all</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./*.js&quot;</span><span class="p">,</span> <span class="s2">&quot;test/**/*.js&quot;</span><span class="p">,</span> <span class="s2">&quot;site/javascript/**/*.js&quot;</span><span class="p">],</span>
+                <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">js</span><span class="o">:</span> <span class="p">{</span>
+                        <span class="nx">jslintHappy</span><span class="o">:</span> <span class="kc">true</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">lineending</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">all</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">files</span><span class="o">:</span> <span class="p">[{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;./&quot;</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./*.js&quot;</span><span class="p">],</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./&quot;</span>
+                <span class="p">},</span> <span class="p">{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;./test/&quot;</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./**/*.js&quot;</span><span class="p">],</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./test/&quot;</span>
+                <span class="p">},</span> <span class="p">{</span>
+                    <span class="nx">expand</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="nx">cwd</span><span class="o">:</span> <span class="s2">&quot;./site/javascript/&quot;</span><span class="p">,</span>
+                    <span class="nx">src</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./**/*.js&quot;</span><span class="p">],</span>
+                    <span class="nx">dest</span><span class="o">:</span> <span class="s2">&quot;./site/javascript/&quot;</span>
+                <span class="p">}],</span>
+                <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+                    <span class="nx">eol</span><span class="o">:</span> <span class="s2">&quot;crlf&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Project configuration.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>NPM tasks</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-contrib-jshint&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-contrib-uglify&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-mocha&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-contrib-copy&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-contrib-connect&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-contrib-clean&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-docco&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-contrib-compress&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-string-replace&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-contrib-watch&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-jekyll&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-mkdir&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-strip-code&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-jsbeautifier&quot;</span><span class="p">);</span>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s2">&quot;grunt-lineending&quot;</span><span class="p">);</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Wrap the mocha task</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">renameTask</span><span class="p">(</span><span class="s2">&quot;mocha&quot;</span><span class="p">,</span> <span class="s2">&quot;orig-mocha&quot;</span><span class="p">);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;mocha&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;mocha&quot;</span><span class="p">);</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Turn mocha.files into urls for conrib-mocha</p>             </td>             <td class="code">               <div class="highlight"><pre>
+        <span class="kd">var</span> <span class="nx">urls</span> <span class="o">=</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">_</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">expand</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">all</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">urls</span><span class="p">),</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">&quot;http://localhost:9001/&quot;</span> <span class="o">+</span> <span class="nx">file</span><span class="p">;</span>
+        <span class="p">});</span>
+
+        <span class="nx">config</span><span class="p">.</span><span class="nx">all</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">urls</span> <span class="o">=</span> <span class="nx">urls</span><span class="p">;</span>
+
+        <span class="nx">grunt</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;orig-mocha&quot;</span><span class="p">,</span> <span class="nx">config</span><span class="p">);</span>
+
+        <span class="kd">var</span> <span class="nx">taskName</span> <span class="o">=</span> <span class="s2">&quot;orig-mocha&quot;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">taskName</span> <span class="o">+=</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nx">target</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="nx">grunt</span><span class="p">.</span><span class="nx">task</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">taskName</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;connect-keepalive&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">);</span>
+        <span class="nx">config</span><span class="p">.</span><span class="nx">server</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">keepalive</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">grunt</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="nx">config</span><span class="p">);</span>
+        <span class="nx">grunt</span><span class="p">.</span><span class="nx">task</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s2">&quot;connect&quot;</span><span class="p">);</span>
+    <span class="p">});</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>Custom tasks</p>             </td>             <td class="code">               <div class="highlight"><pre>
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadTasks</span><span class="p">(</span><span class="s2">&quot;./site/_tasks&quot;</span><span class="p">);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;travis&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;verify&quot;</span><span class="p">,</span> <span class="s2">&quot;build&quot;</span><span class="p">]);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;connect&quot;</span><span class="p">,</span> <span class="s2">&quot;mocha&quot;</span><span class="p">]);</span>
+
+</pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>grunt.registerTask("testSpecific", ["less", "connect", "mocha:specific"]);</p>             </td>             <td class="code">               <div class="highlight"><pre>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;verify&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;jshint&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">]);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;copyDist&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;copy:distJs&quot;</span><span class="p">]);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;clean&quot;</span><span class="p">,</span> <span class="s2">&quot;copyDist&quot;</span><span class="p">,</span> <span class="s2">&quot;strip_code&quot;</span><span class="p">,</span> <span class="s2">&quot;uglify&quot;</span><span class="p">]);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;docs&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;mkdir:docco&quot;</span><span class="p">,</span> <span class="s2">&quot;docco&quot;</span><span class="p">,</span> <span class="s2">&quot;docco-add-links&quot;</span><span class="p">,</span> <span class="s2">&quot;copy:doccoFix&quot;</span><span class="p">]);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;site&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;compress&quot;</span><span class="p">,</span> <span class="s2">&quot;sitePages&quot;</span><span class="p">,</span> <span class="s2">&quot;docs&quot;</span><span class="p">,</span> <span class="s2">&quot;copy:deploy&quot;</span><span class="p">]);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;siteNoVerify&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;build&quot;</span><span class="p">,</span> <span class="s2">&quot;compress&quot;</span><span class="p">,</span> <span class="s2">&quot;sitePages&quot;</span><span class="p">,</span> <span class="s2">&quot;docs&quot;</span><span class="p">,</span> <span class="s2">&quot;copy:deploy&quot;</span><span class="p">]);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;sitePages&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;jekyll&quot;</span><span class="p">,</span> <span class="s2">&quot;string-replace:site&quot;</span><span class="p">,</span> <span class="s2">&quot;copy:distSite&quot;</span><span class="p">]);</span>
+
+    <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s2">&quot;beautify&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;jsbeautifier&quot;</span><span class="p">,</span> <span class="s2">&quot;lineending&quot;</span><span class="p">]);</span>
+<span class="p">};</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
