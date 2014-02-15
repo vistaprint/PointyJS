@@ -44,7 +44,7 @@ module.exports = function (grunt) {
         },
         docco: {
             javascript: {
-                src: ["js/**/*.js"],
+                src: ["./*.js"],
                 dest: "./site/_site/docco/"
             }
         },

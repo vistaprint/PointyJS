@@ -5,7 +5,7 @@ title: jQuery.pointerEvents
 
 ## jQuery.pointerEvents
 
-jQuery.pointerEvents is a polyfill for the new [pointer events api](http://www.w3.org/Submission/pointer-events/). It is an abstraction on top of touch and mouse events which mimics native pointer events. This is particularly useful because it will work across all devices which support either the Apple-style touch events (i.e. iOS, Android, Chrome OS) and those that support pointer events (i.e. Windows 8 and Windows Phone 7).
+jQuery.pointerEvents is a polyfill for the new [pointer events api](http://www.w3.org/TR/pointerevents/). It is an abstraction on top of touch and mouse events which mimics native pointer events. This is particularly useful because it will work across all devices which support either the Apple-style touch events (i.e. iOS, Android, Chrome OS) and those that support pointer events (i.e. Windows 8 and Windows Phone 7).
 
 ### Event types
 
