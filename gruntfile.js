@@ -10,7 +10,7 @@ module.exports = function (grunt) {
     var config = {
         pkg: grunt.file.readJSON("package.json"),
         jshint: {
-            uses_defaults: ["gruntfile.js", "js/**/*.js"],
+            uses_defaults: ["gruntfile.js", "*.js"],
             with_overrides: {
                 options: {
                     jshintrc: "test/.jshintrc"
@@ -59,8 +59,8 @@ module.exports = function (grunt) {
             distJs: {
                 files: [{
                     expand: true,
-                    cwd: "./js/",
-                    src: ["**/*.js"],
+                    cwd: "./",
+                    src: ["*.js"],
                     dest: "dist/"
                 }]
             },
@@ -164,7 +164,7 @@ module.exports = function (grunt) {
         },
         watch: {
             copyJs: {
-                files: ["./js/**/*.js"],
+                files: ["./*.js"],
                 tasks: ["copy:distJs", "copy:distSite"]
             },
             jekyll: {
@@ -175,32 +175,34 @@ module.exports = function (grunt) {
                 spawn: false
             }
         },
-        jsbeautifier : {
+        jsbeautifier: {
             all: {
-                src: ["js/**/*.js", "test/**/*.js", "site/javascript/**/*.js"],
-                options: { js: { jslintHappy: true } }
+                src: ["./*.js", "test/**/*.js", "site/javascript/**/*.js"],
+                options: {
+                    js: {
+                        jslintHappy: true
+                    }
+                }
             }
         },
-        lineending : {
+        lineending: {
             all: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: "./js/",
-                        src: ["./**/*.js"],
-                        dest: "./js/"
-                    }, {
-                        expand: true,
-                        cwd: "./test/",
-                        src: ["./**/*.js"],
-                        dest: "./test/"
-                    }, {
-                        expand: true,
-                        cwd: "./site/javascript/",
-                        src: ["./**/*.js"],
-                        dest: "./site/javascript/"
-                    }
-                ],
+                files: [{
+                    expand: true,
+                    cwd: "./",
+                    src: ["./*.js"],
+                    dest: "./"
+                }, {
+                    expand: true,
+                    cwd: "./test/",
+                    src: ["./**/*.js"],
+                    dest: "./test/"
+                }, {
+                    expand: true,
+                    cwd: "./site/javascript/",
+                    src: ["./**/*.js"],
+                    dest: "./site/javascript/"
+                }],
                 options: {
                     eol: "crlf"
                 }
