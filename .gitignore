@@ -230,5 +230,5 @@ node_modules/
 ## Project specific
 #############
 site/_site/
-site/skinnyjs.zip
+site/pointyjs.zip
 web.config
