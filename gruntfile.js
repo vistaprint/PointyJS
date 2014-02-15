@@ -60,7 +60,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: "./",
-                    src: ["*.js"],
+                    src: ["jquery.pointer*.js"],
                     dest: "dist/"
                 }]
             },
