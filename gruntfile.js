@@ -42,19 +42,6 @@ module.exports = function (grunt) {
                 timeout: 20000
             }
         },
-        docco: {
-            javascript: {
-                src: ["./*.js"],
-                dest: "./site/_site/docco/"
-            }
-        },
-        mkdir: {
-            docco: {
-                options: {
-                    create: ["./site/_site/docco/"]
-                }
-            }
-        },
         copy: {
             distJs: {
                 files: [{
@@ -67,37 +54,6 @@ module.exports = function (grunt) {
                     cwd: "./",
                     src: ["LICENSE"],
                     dest: "dist/"
-                }]
-            },
-            distSite: {
-                files: [{
-                    expand: true,
-                    cwd: "./dist",
-                    src: ["**"],
-                    dest: "./site/_site/dist/"
-                }, {
-                    expand: true,
-                    flatten: true,
-                    src: ["LICENSE"],
-                    processFile: true,
-                    dest: "./site/_site/"
-                }]
-            },
-            doccoFix: {
-                files: [{
-                    expand: true,
-                    cwd: "./site/_docco/",
-                    src: ["**"],
-                    dest: "./site/_site/docco"
-                }]
-            },
-            deploy: {
-                files: [{
-                    expand: true,
-                    cwd: "./site/_site/",
-                    flatten: false,
-                    src: ["**"],
-                    dest: "./.git/docs-temp/"
                 }]
             }
         },
@@ -116,50 +72,7 @@ module.exports = function (grunt) {
             options: {
                 force: true
             },
-            build: ["./dist"],
-            deploy: ["./.git/docs-temp"],
-            docs: ["./site/_site"]
-        },
-        jekyll: {
-            docs: {
-                options: {
-                    src: "./site/",
-                    config: "./site/_config.yml",
-                    dest: "./site/_site"
-                }
-            }
-        },
-        compress: {
-            main: {
-                options: {
-                    archive: "./site/pointyjs.zip"
-                },
-                files: [{
-                    // includes files in path
-                    expand: true,
-                    src: ["**"],
-                    cwd: "./dist",
-                    dest: "",
-                    filter: "isFile"
-                }]
-            }
-        },
-        "string-replace": {
-            site: {
-                files: [{
-                    expand: true,
-                    cwd: "./site/_site/",
-                    flatten: false,
-                    src: ["*.html"],
-                    dest: "./site/_site/"
-                }],
-                options: {
-                    replacements: [{
-                        pattern: /\.\.\/dist\//ig,
-                        replacement: "dist/"
-                    }]
-                }
-            }
+            build: ["./dist"]
         },
         "strip_code": {
             options: {},
@@ -170,11 +83,7 @@ module.exports = function (grunt) {
         watch: {
             copyJs: {
                 files: ["./*.js"],
-                tasks: ["copy:distJs", "copy:distSite"]
-            },
-            jekyll: {
-                files: ["./site/**/*", "!./site/_site/*"],
-                tasks: ["sitePages"]
+                tasks: ["copy:distJs"]
             },
             options: {
                 spawn: false
@@ -182,7 +91,7 @@ module.exports = function (grunt) {
         },
         jsbeautifier: {
             all: {
-                src: ["./*.js", "test/**/*.js", "site/javascript/**/*.js"],
+                src: ["./*.js", "test/**/*.js"],
                 options: {
                     js: {
                         jslintHappy: true
@@ -202,11 +111,6 @@ module.exports = function (grunt) {
                     cwd: "./test/",
                     src: ["./**/*.js"],
                     dest: "./test/"
-                }, {
-                    expand: true,
-                    cwd: "./site/javascript/",
-                    src: ["./**/*.js"],
-                    dest: "./site/javascript/"
                 }],
                 options: {
                     eol: "crlf"
@@ -225,12 +129,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks("grunt-contrib-clean");
-    grunt.loadNpmTasks("grunt-docco");
-    grunt.loadNpmTasks("grunt-contrib-compress");
     grunt.loadNpmTasks("grunt-string-replace");
     grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.loadNpmTasks("grunt-jekyll");
-    grunt.loadNpmTasks("grunt-mkdir");
     grunt.loadNpmTasks("grunt-strip-code");
     grunt.loadNpmTasks("grunt-jsbeautifier");
     grunt.loadNpmTasks("grunt-lineending");
@@ -266,7 +166,6 @@ module.exports = function (grunt) {
     });
 
     // Custom tasks
-    grunt.loadTasks("./site/_tasks");
 
     grunt.registerTask("travis", "default");
 
@@ -281,14 +180,6 @@ module.exports = function (grunt) {
     grunt.registerTask("copyDist", ["copy:distJs"]);
 
     grunt.registerTask("build", ["clean", "copyDist", "strip_code", "uglify"]);
-
-    grunt.registerTask("docs", ["mkdir:docco", "docco", "docco-add-links", "copy:doccoFix"]);
-
-    grunt.registerTask("site", ["default", "compress", "sitePages", "docs", "copy:deploy"]);
-
-    grunt.registerTask("siteNoVerify", ["build", "compress", "sitePages", "docs", "copy:deploy"]);
-
-    grunt.registerTask("sitePages", ["jekyll", "string-replace:site", "copy:distSite"]);
 
     grunt.registerTask("beautify", ["jsbeautifier", "lineending"]);
 };
