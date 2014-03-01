@@ -1,4 +1,4 @@
-describe('jquery.pointerEvents', function () {
+describe('pointy.js', function () {
     var el = $('#test');
 
     function test(pointerEvent, nativeEvents) {
