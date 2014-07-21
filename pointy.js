@@ -443,6 +443,18 @@
                 if (event.target && event.target.click && _startScrollOffset === scrollY()) {
                     event.target.click();
                 }
+
+                // on iOS 5 there is no native click function on elements, therefore we need to let jQuery handle it (AR-16405)
+                // on Android 4.1, you cannot prevent it from firing the native click event on touchend (GD-155106)
+                else if (event.target && _startScrollOffset === scrollY()) {
+                    var clickTimer = setTimeout(function () {
+                        $(event.target).click();
+                    }, 200);
+
+                    $(event.target).one('click', function () {
+                        clearTimeout(clickTimer);
+                    });
+                }
             },
             mouse: function (event) {
                 // the Mouse Events API provides the button on mouseup
