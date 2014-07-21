@@ -142,6 +142,10 @@
     // used only as part of the polyfill for Touch and Mouse Events API
     var _isPointerDown = false;
 
+    // signal to mark when the last touchend event was fired, used to help
+    // prevent mouseup events from double firing pointerend events.
+    var _touchReleased = null;
+
     // storage of the last seen touches provided by the native touch events spec
     var _lastTouches = [];
 
@@ -427,6 +431,9 @@
                 // release the pointerdown lock
                 _isPointerDown = false;
 
+                // prevent the mouseup from doing anything
+                _touchReleased = +(new Date());
+
                 // on "touchend", calling prevent default prevents the "mouseup" and "click" event
                 // however on native "mouseup" events preventing default does not cancel the "click" event
                 // as per the pointer event spec on "pointerup" preventing default should not cancel the "click" event
@@ -457,6 +464,11 @@
                 }
             },
             mouse: function (event) {
+                // if a touchend event was triggered in the last 300ms, ignore any following mouseup events
+                if (_touchReleased !== null && +(new Date()) - _touchReleased < 300) {
+                    return;
+                }
+
                 // the Mouse Events API provides the button on mouseup
                 var button = getStandardizedButtonsProperty(event);
 
