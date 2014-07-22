@@ -458,7 +458,7 @@
                         $(event.target).click();
                     }, 200);
 
-                    $(event.target).one('click', function () {
+                    $(event.target).one("click", function () {
                         clearTimeout(clickTimer);
                     });
                 }
