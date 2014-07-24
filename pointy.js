@@ -150,10 +150,6 @@
     // bitmask to identify which buttons are currently down
     var _buttons = 0;
 
-    // signal to mark when the last touchend event was fired, used to help
-    // prevent mouseup events from double firing pointerend events.
-    var _touchReleased = null;
-
     // storage of the last seen touches provided by the native touch events spec
     var _lastTouches = [];
 
@@ -229,7 +225,7 @@
             // clicks on pointerdown or pointerup or from gestures like press and presshold
             event.preventClick = function () {
                 event.isClickPrevented = returnTrue;
-                $(event.target).one('click', returnFalse);
+                $(event.target).one("click", returnFalse);
             };
 
             event.isClickPrevented = returnFalse;
@@ -453,7 +449,7 @@
 
                 // if we are preventing the next click event, then simply don't trigger one below
                 if (jEvent.isClickPrevented()) {
-                    $(event.target).off('click', returnFalse);
+                    $(event.target).off("click", returnFalse);
                     return;
                 }
 
@@ -481,7 +477,7 @@
                         $(event.target).click();
                     }, 200);
 
-                    $(event.target).one('click', function () {
+                    $(event.target).one("click", function () {
                         clearTimeout(clickTimer);
                     });
                 }

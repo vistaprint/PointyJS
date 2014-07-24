@@ -101,7 +101,7 @@ describe('pointy.js', function () {
                 buttons = event.buttons;
             });
 
-            el.one('pointerdown', function (event) {
+            el.one('pointerdown', function () {
                 chai.assert.fail(); // pointerdown should not be called on corded button downs
             });
 
@@ -119,7 +119,7 @@ describe('pointy.js', function () {
                 buttons = event.buttons;
             });
 
-            el.one('pointerdown', function (event) {
+            el.one('pointerdown', function () {
                 chai.assert.fail(); // pointerdown should not be called on corded button downs
             });
 
@@ -137,7 +137,7 @@ describe('pointy.js', function () {
                 buttons = event.buttons;
             });
 
-            el.one('pointerup', function (event) {
+            el.one('pointerup', function () {
                 chai.assert.fail(); // pointerdown should not be called on corded button downs
             });
 
@@ -155,7 +155,7 @@ describe('pointy.js', function () {
                 buttons = event.buttons;
             });
 
-            el.one('pointerup', function (event) {
+            el.one('pointerup', function () {
                 chai.assert.fail(); // pointerdown should not be called on corded button downs
             });
 
