@@ -103,48 +103,42 @@ The ``pointerId`` is always 1 for the mouse. It however provides a unique identi
 
 ``event.preventClick()`` is a utility to prevent the native click event following a pointer event from stopping itself. This can be used to prevent navigation on a ``pointerdown`` event, or from within the ``press`` gesture event you can prevent navigation only on touch devices like this:
 
-{% highlight javascript %}
-
-	$('a').on('pointerdown', function (event) {
-		if (event.pointerType === 'touch') {
-			event.preventClick();
-			toggleDropDownMenu();
-		}
-	});
-
-{% endhighlight %}
+```js
+$('a').on('pointerdown', function (event) {
+	if (event.pointerType === 'touch') {
+		event.preventClick();
+		toggleDropDownMenu();
+	}
+});
+```
 
 You can check whether the following click event has been prevented using ``event.isClickPrevented()``.
 
 ### Examples
 
-{% highlight javascript %}
-	
-	$('a').on('pointerdown', function (event) {
+```js
+$('a').on('pointerdown', function (event) {
 
-		// Getting coordinates
-		var top = event.clientX;
-		var left = event.clientY;
+	// Getting coordinates
+	var top = event.clientX;
+	var left = event.clientY;
 
-		// Detecting the underlying event
-		var underlyingEvent = e.originalEvent; // could be a MouseDown event, TouchStart event, or actual PointerDown event.
+	// Detecting the underlying event
+	var underlyingEvent = e.originalEvent; // could be a MouseDown event, TouchStart event, or actual PointerDown event.
 
-		// continue on your way...
-	});
+	// continue on your way...
+});
+```
 
-{% endhighlight %}
-
-{% highlight javascript %}
-
-	// opening a context menu
-	$('a').on({
-		// if they either press down for awhile; like people do on mobile devices.
-		'presshold': openMenu,
-		// or we can get the contextmenu event, such as from right clicking
-		'contextmenu': openMenu
-	});
-
-{% endhighlight %}
+```js
+// opening a context menu
+$('a').on({
+	// if they either press down for awhile; like people do on mobile devices.
+	'presshold': openMenu,
+	// or we can get the contextmenu event, such as from right clicking
+	'contextmenu': openMenu
+});
+```
 
 For more examples, look at [Skinny.js](https://github.com/vistaprint/SkinnyJS) which uses pointy.js within many of its plugins.
 
