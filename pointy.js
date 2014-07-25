@@ -1,4 +1,12 @@
-// Pointer Events polyfill for jQuery
+/*!
+ * Pointy.js
+ * Pointer Events polyfill for jQuery
+ * https://github.com/vistaprint/PointyJS
+ *
+ * Depends on jQuery, see http://jquery.org
+ *
+ * Developed by Vistaprint.com
+ */
 
 (function ($, window, document, undefined) {
 
