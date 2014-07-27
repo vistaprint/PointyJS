@@ -109,6 +109,12 @@ The bitmask of these identifies which buttons are pressed, such as, if both the 
 
 The ``pointerId`` is always 1 for the mouse. It however provides a unique identifer for touch-driven events, which you can compare across the pointerdown, pointermove and pointerend events to keep track of separate fingers.
 
+#### Pressure, Width, Height
+
+``event.pressure`` is a noramlized pressure of the pointer represented as a float in the range of [0,1]. When the hardware does not support pressure detection, the value will be 0.5 when any pointer is active (i.e. user is currently touching or a button is down) and 0 otherwise.
+
+``event.width`` and ``event.height`` represent the contact geometry for a pointer. When the hardware cannot provide this, the value will be 0.
+
 #### Prevent Click
 
 ``event.preventClick()`` is a utility to prevent the native click event following a pointer event from stopping itself. This can be used to prevent navigation on a ``pointerdown`` event, or from within the ``press`` gesture event you can prevent navigation only on touch devices like this:
