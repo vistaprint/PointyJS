@@ -654,4 +654,35 @@
         });
     }
 
+    // add support for pointerenter and pointerlave
+    // pointerenter and pointerleave were added in IE11, they do not exist in IE10
+    if (!support.pointer || (navigator.msPointerEnabled && !navigator.pointerEnabled)) {
+        // Create a wrapper similar to jQuery's mouseenter/leave events
+        // using pointer events (pointerover/out) and event-time checks
+        jQuery.each({
+            pointerenter: navigator.msPointerEnabled ? 'MSPointerOver' : 'mouseover',
+            pointerleave: navigator.msPointerEnabled ? 'MSPointerOut' : 'mouseout'
+        }, function (orig, fix) {
+            jQuery.event.special[orig] = {
+                delegateType: fix,
+                bindType: fix,
+                handle: function (event) {
+                    var ret,
+                        target = this,
+                        related = event.relatedTarget,
+                        handleObj = event.handleObj;
+
+                    // For mousenter/leave call the handler if related is outside the target.
+                    // NB: No relatedTarget if the mouse left/entered the browser window
+                    if (!related || (related !== target && !jQuery.contains(target, related))) {
+                        event.type = handleObj.origType;
+                        ret = handleObj.handler.apply(this, arguments);
+                        event.type = fix;
+                    }
+                    return ret;
+                }
+            };
+        });
+    }
+
 })(jQuery, window, document);

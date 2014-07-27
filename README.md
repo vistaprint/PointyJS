@@ -63,21 +63,89 @@ Pointy allows you to attach only to pointer events and let it deal with support 
 
 #### Included by pointy.js
 
-* `pointerdown`: abstraction on top of mousedown and touchstart
-* `pointerup`: abstraction on top of mouseup and touchend
-* `pointermove`: abstraction on top of mousemove and touchmove
-* `pointerover`: abstraction on top of mouseover (no touch equivalent)
-* `pointerout`: abstraction on top of mouseout (no touch equivalent)
+##### pointerdown
 
-### Included by pointy.gestures.js
+Dispatched when a pointer enters the active state. For mouse devices, this is when the device goes from no buttons depressed to at least one button depressed. Subsequent button pressing on mouse devices only trigger a `pointermove` event. For touch and pen devices, this is when physical contact is made.
 
-Pointy offers an extension file, called `pointy.gestures.js`, which adds utilities similar to [jQuery mobile's touch events](http://api.jquerymobile.com/category/events).
+Pointy abstracts `mousedown` and `touchstart` events.
 
-* `press`: Triggered after a quick, complete interaction event. (similar to JQM's `tap`)
-* `presshold`: Triggered after a sustained complete interaction event. (similar to JQM's `taphold`)
-* `sweep`: Triggered when a horizontal drag occurs within a short time duration. The event object will contain ``direction`` indicating right or left. (similar to JQM's `swipe`)
-* `sweepleft`: Triggered when a sweep event occurs moving in the left direction. (similar to JQM's `swipeleft`)
-* `sweepright`: Triggered when a sweep event occurs moving in the right direction. (similar to JQM's `swiperight`)
+##### pointerup
+
+Dispatched when a pointer leaves the active state. For mouse devices, this is when the device goes from at least one button depressed to no buttons depressed. For touch and pen devices, this is when physical contact is removed.
+
+Pointy abstracts `mouseup` and `touchend` events.
+
+##### pointercancel
+
+Dispatched when a pointer is determined to be unlikely to produce further events. Such as on a mobile device, when the user starts to touch and then proceeds to zoom or pan the page. Other times this may be triggered is when the device's screen orientation is changed while a pointer is active, the user starts using more inputs than the device supports (such as on five-finger contact screens and the user attempts to use more than five fingers).
+
+Pointy abstracts `touchcancel` events, there is no mouse equivalent. Pointy does not attempt detect situations that may cause a `pointercancel` event directly. User agents are responsible for determining when it thinks it should trigger cancel events, as such, each device may trigger cancel events for different reasons.
+
+##### pointermove
+
+Dispatched when a pointer changes coordinates, button state, pressure, tilt, or contact geometry.
+
+Pointy abstracts `mousemove` and `touchmove` events.
+
+##### pointerover
+
+Dispatched when a pointing device is moved into the hit test boundaries of an element.
+
+Pointy abstracts `mouseover`, there is no touch equivalent.
+
+##### pointerout
+
+Dispatched when a pointing device is moved out of the hit test boundaries of an element.
+
+Pointy abstracts `mouseout`, there is no touch equivalent.
+
+##### pointerenter
+
+Dispatched when a pointing device hits the boundaries of an element or one of its descendants.
+This is similar to `pointerover`, however `pointerover` does not consider descendants.
+
+Pointy abstracts `MSPointerOver` for IE10, otherwise it uses jQuery's `mouseenter` polyfill, there is no touch equivalent.
+
+##### pointerleave
+
+Dispatched when a pointing device is moved off of the hit test boundaries of an element and all of its descendants.
+This is similar to `pointerout`, however `pointerout` does not consider descendants.
+
+Pointy abstracts `MSPointerOut` for IE10, otherwise it uses jQuery's `mouseleave` polyfill, there is no touch equivalent.
+
+#### Included by pointy.gestures.js
+
+Pointy offers a gestures library which adds utilities similar to [jQuery mobile's touch events](http://api.jquerymobile.com/category/events).
+
+##### press
+
+Dispatched after a quick, complete interaction event. This is similar to JQM's `tap` event.
+
+A `press` is determined immediately upon `pointerend`, which means it fires without the 300ms delay on touch devices but by this time we have already determined it to be a complete interaction.
+
+##### presshold
+
+Dispatched after a sustained complete interaction event. Sometimes referred to as a long press. This is similar to JQM's `taphold`.
+
+A `presshold` is determined by holding without significant pointer movement for 750ms.
+
+`$.event.special.press.pressholdThreshold` (default 750) - This value dictates how long (in ms) the user must hold their press before the `presshold` event is dispatched.
+
+##### sweep
+
+Dispatched when a horizontal drag occurs within a short time duration. The event object will contain ``direction`` indicating right or left. This is similar to JQM's `swipe` event.
+
+##### sweepleft
+
+Dispatched when a sweep event occurs moving in the left direction. This is similar to JQM's `swipeleft` event.
+
+##### sweepright
+
+Dispatched when a sweep event occurs moving in the right direction. This is similar to JQM's `swiperight` event.
+
+### The `touch-action` CSS property
+
+Pointy does not implement a polyfill for the `touch-action` CSS property. We recommend setting `touch-action` to `none` for all elements you indent to attach pointer events to through Pointy. This ensures you receive the same events across devices that support native pointer events and those that don't natively.
 
 ### Event object
 
