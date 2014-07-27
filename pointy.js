@@ -660,8 +660,8 @@
         // Create a wrapper similar to jQuery's mouseenter/leave events
         // using pointer events (pointerover/out) and event-time checks
         jQuery.each({
-            pointerenter: navigator.msPointerEnabled ? 'MSPointerOver' : 'mouseover',
-            pointerleave: navigator.msPointerEnabled ? 'MSPointerOut' : 'mouseout'
+            pointerenter: navigator.msPointerEnabled ? "MSPointerOver" : "mouseover",
+            pointerleave: navigator.msPointerEnabled ? "MSPointerOut" : "mouseout"
         }, function (orig, fix) {
             jQuery.event.special[orig] = {
                 delegateType: fix,
