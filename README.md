@@ -185,10 +185,14 @@ The ``pointerId`` is always 1 for the mouse. It however provides a unique identi
 
 #### Prevent Click
 
-``event.preventClick()`` is a utility to prevent the native click event following a pointer event from stopping itself. This can be used to prevent navigation on a ``pointerdown`` event, or from within the ``press`` gesture event you can prevent navigation only on touch devices like this:
+``event.preventClick()`` is a utility to stop the native click event that follows a pointer event.
+
+The click event is not always "prevented", in the cases where it cannot prevent it from being triggered it will render the event useless by calling `event.preventDefault()` and `event.stopPropagation()` from the click event itself.
+
+This is especially useful when attempting to prevent navigation from within a pointer event. An example of this:
 
 ```js
-$('a').on('pointerdown', function (event) {
+$('a').on('press', function (event) {
 	if (event.pointerType === 'touch') {
 		event.preventClick();
 		toggleDropDownMenu();
@@ -196,7 +200,7 @@ $('a').on('pointerdown', function (event) {
 });
 ```
 
-You can check whether the following click event has been prevented using ``event.isClickPrevented()``.
+You can check whether the following click event has been prevented using ``event.isClickPrevented()``. These utilities can be used from `pointerdown`, `pointerup`, `pointermove`, `press`, `presshold`, `swipe`, `swipeleft`, and `swiperight`.
 
 ### Examples
 
