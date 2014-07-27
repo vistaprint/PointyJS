@@ -1,10 +1,12 @@
-# pointy.js: pointer events polyfill for jQuery [![Build Status](https://secure.travis-ci.org/vistaprint/PointyJS.png?branch=master)](http://travis-ci.org/vistaprint/PointyJS)
+# Pointy: Pointer Events polyfill for jQuery [![Build Status](https://secure.travis-ci.org/vistaprint/PointyJS.png?branch=master)](http://travis-ci.org/vistaprint/PointyJS)
 
 [View the project page](http://vistaprint.github.io/PointyJS)
 
-pointy.js is a polyfill for the [pointer events API](http://www.w3.org/TR/pointerevents/). It targets support for on all browsers including IE7+. Pointer events are emulated on browsers that don't support them by transforming touch/mouse events into pointer events. 
+Pointy is a polyfill for the [pointer events API](http://www.w3.org/TR/pointerevents/). Pointy targets support
+for all browsers including IE7+; it works by transforming touch and mouse events into pointer events on devices
+that don't natively support pointer events. All you need to do is bind to pointer events and let Pointy do the rest.
 
-pointy.js has no dependencies other than jQuery.
+Pointy has no dependencies other than jQuery.
 
 [Download pointy.js](http://vistaprint.github.io/PointyJS/pointyjs.zip)
 
@@ -20,10 +22,6 @@ This library is developed by [Vistaprint](http://www.vistaprint.com) and is trie
 * Safari 5+
 * iOS Mobile Safari 6+
 
-### Internet Explorer 10
-
-IE10 had MSPointerEvents, which were prior to the w3 standardized submission. All of those MSPointer events are transformed to match the IE11+ and standardized specifications.
-
 ### Makes Pointer Events better
 
 Pointy.js is also useful when working with devices that support pointer events natively. It adds utilities and standardizes events similar to how jQuery does with mouse events.
@@ -32,12 +30,24 @@ Pointy.js is also useful when working with devices that support pointer events n
 
 There are many little edge cases when you try to work with mouse and touch events at the same time. Such as when you call ``preventDefault`` on a touchstart or touchend, it will prevent the emulated mouse event that follows (mousedown and mouseup, respectively), and then it also cancels the native click event from triggering. Whereas, calling ``preventDefault`` on a mousedown or a mouseup event does not prevent the native click event from trigger. Additionally, there is no native way to cancel the click event from trigger from pointer events. Pointy fixes this by adding the utility method ``preventClick`` to the Event object passed.
 
+### Internet Explorer 10
+
+IE10 implemented MSPointerEvents, which was prior to the w3 standardized submission. There are a few minor differences between MSPointerEvents and the standardized Pointer Events, so Pointy transforms all of those MSPointer events into standardized pointer events just like it does for mouse and touch events.
+
 ## Inclusion
 
 Include pointy.js in your JavaScript bundle or add it to your HTML page like this:
 
-	<script type="text/javascript" src="/path/to/pointy.js"></script>
-	<!-- pointy.js only works with jQuery -->
+```html
+<!-- pointy.js requires jQuery -->
+<script type="text/javascript" src="/path/to/pointy.js"></script>
+```
+
+If you intend to use it, you can include the additional gestures library.
+
+```html
+<script type="text/javascript" src="/path/to/pointy.gestures.js"></script>
+```
 
 The script must me loaded prior to binding to any pointer events of any element on the page.
 
