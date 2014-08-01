@@ -69,6 +69,8 @@
 
 <p>pointy.js is a polyfill for the new <a href='http://www.w3.org/TR/pointerevents/'>pointer events api</a>. It is an abstraction on top of touch and mouse events which mimics native pointer events. This is particularly useful because it will work across all devices which support either the Apple-style touch events (i.e. iOS, Android, Chrome OS) and those that support pointer events (i.e. Windows 8 and Windows Phone 7).</p>
 
+<p>pointy.js allows you to attach only to pointer events and let it deal with support all the other types of events. You no longer need to handle mouse and touch events separately.</p>
+
 <h3 id='inclusion'>Inclusion</h3>
 
 <p>Include pointy.js in your JavaScript bundle or add it to your HTML page:</p>
@@ -79,8 +81,6 @@
 <div class='highlight'><pre><code class='html'><span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span> <span class='na'>src=</span><span class='s'>&quot;/path/to/pointy.gestures.js&quot;</span><span class='nt'>&gt;&lt;/script&gt;</span>
 </code></pre></div>
 <p>The script must me loaded prior to binding to any pointer events of any element on the page.</p>
-
-<p>pointy.js allows you to attach only to pointer events and let it deal with support all the other types of events. You no longer attach to mouse or touch events, only attach to pointer events.</p>
 
 <h3 id='events'>Events</h3>
 
