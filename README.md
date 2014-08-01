@@ -1,12 +1,12 @@
-# Pointy: Pointer Events polyfill for jQuery [![Build Status](https://secure.travis-ci.org/vistaprint/PointyJS.png?branch=master)](http://travis-ci.org/vistaprint/PointyJS)
+# pointy.js: Pointer Events polyfill for jQuery [![Build Status](https://secure.travis-ci.org/vistaprint/PointyJS.png?branch=master)](http://travis-ci.org/vistaprint/PointyJS)
 
 [View the project page](http://vistaprint.github.io/PointyJS)
 
-Pointy is a polyfill for the [pointer events API](http://www.w3.org/TR/pointerevents/). Pointy targets support
+pointy.js is a polyfill for the [pointer events API](http://www.w3.org/TR/pointerevents/). pointy.js targets support
 for all browsers including IE7+; it works by transforming touch and mouse events into pointer events on devices
-that don't natively support pointer events. All you need to do is bind to pointer events and let Pointy do the rest.
+that don't natively support pointer events. All you need to do is bind to pointer events and let pointy.js do the rest.
 
-Pointy has no dependencies other than jQuery.
+pointy.js has no dependencies other than jQuery.
 
 [Download pointy.js](http://vistaprint.github.io/PointyJS/pointyjs.zip)
 
@@ -22,28 +22,30 @@ This library is developed by [Vistaprint](http://www.vistaprint.com) and is trie
 * Safari 5+
 * iOS Mobile Safari 6+
 
-### Makes Pointer Events better
+pointy.js even supports IE10, which implemented MSPointerEvents prior to the W3C standardized submission. There are a few minor differences between MSPointerEvents and the standardized Pointer Events, so pointy.js transforms all of those MSPointer events into standardized pointer events just like it does for mouse and touch events.
 
-Pointy.js is also useful when working with devices that support pointer events natively. It adds utilities and standardizes events similar to how jQuery does with mouse events.
+## Why use pointy.js?
+
+### Standardizes pointer events across all browsers
+
+pointy.js is also useful when working with devices that support pointer events natively. It adds utilities and standardizes events similar to how jQuery does with mouse events.
 
 ### Handles edge-cases well
 
-There are many little edge cases when you try to work with mouse and touch events at the same time. Such as when you call ``preventDefault`` on a touchstart or touchend, it will prevent the emulated mouse event that follows (mousedown and mouseup, respectively), and then it also cancels the native click event from triggering. Whereas, calling ``preventDefault`` on a mousedown or a mouseup event does not prevent the native click event from trigger. Additionally, there is no native way to cancel the click event from trigger from pointer events. Pointy fixes this by adding the utility method ``preventClick`` to the Event object passed.
+There are numerous edge cases which arise when handling both mouse and touch events. For example: when calling ``preventDefault()`` on a ``touchstart`` or ``touchend`` event, pointy.js will prevent the emulated mouse event that follows (mousedown and mouseup, respectively), and also prevents the native click event from being triggered. In contrast, calling ``preventDefault`` on a ``mousedown`` or ``mouseup`` event does not prevent the native click event from firing. Additionally, there is no native way to cancel the click event from being triggered from pointer events. pointy.js fixes this by adding the utility method ``preventClick()`` to the event object.
 
-### Internet Explorer 10
+## Usage
 
-IE10 implemented MSPointerEvents, which was prior to the w3 standardized submission. There are a few minor differences between MSPointerEvents and the standardized Pointer Events, so Pointy transforms all of those MSPointer events into standardized pointer events just like it does for mouse and touch events.
+### Inclusion
 
-## Inclusion
-
-Include pointy.js in your JavaScript bundle or add it to your HTML page like this:
+Include pointy.js in your JavaScript bundle or add it to your HTML page:
 
 ```html
 <!-- pointy.js requires jQuery -->
 <script type="text/javascript" src="/path/to/pointy.js"></script>
 ```
 
-If you intend to use it, you can include the additional gestures library.
+Additionally, pointy.guestures can be included, which supports a number of high-level events built on top of pointer events:
 
 ```html
 <script type="text/javascript" src="/path/to/pointy.gestures.js"></script>
@@ -51,13 +53,7 @@ If you intend to use it, you can include the additional gestures library.
 
 The script must me loaded prior to binding to any pointer events of any element on the page.
 
-### Minified
-
-Run `grunt build` to build a minifed version of Pointy using [Uglify](https://github.com/mishoo/UglifyJS). The minified file is saved to `dist/pointy.min.js` and `dist/pointy.gestures.min.js` (optional) or you can download a pre-minified version: [pointy.min.js](http://vistaprint.github.io/PointyJS/dist/pointy.min.js) and [pointy.gestures.min.js](http://vistaprint.github.io/PointyJS/dist/pointy.gestures.min.js).
-
-## Usage
-
-Pointy allows you to attach only to pointer events and let it deal with support all the other types of events. You no longer attach to mouse or touch events, only attach to pointer events.
+pointy.js allows you to attach only to pointer events and let it deal with support all the other types of events. You no longer attach to mouse or touch events, only attach to pointer events.
 
 ### Events
 
@@ -65,99 +61,100 @@ Pointy allows you to attach only to pointer events and let it deal with support 
 
 ##### pointerdown
 
-Dispatched when a pointer enters the active state. For mouse devices, this is when the device goes from no buttons depressed to at least one button depressed. Subsequent button pressing on mouse devices only trigger a `pointermove` event. For touch and pen devices, this is when physical contact is made.
+This event is fired when a pointer enters the active state, and abstracts the `mousedown` and `touchstart` events.
 
-Pointy abstracts `mousedown` and `touchstart` events.
+For mouse devices, this occurs when the device goes from no buttons depressed to at least one button depressed. Subsequent button pressing on mouse devices only trigger a `pointermove` event. 
+
+For touch and pen devices, this event occurs when an initial touch occurs.
 
 ##### pointerup
 
-Dispatched when a pointer leaves the active state. For mouse devices, this is when the device goes from at least one button depressed to no buttons depressed. For touch and pen devices, this is when physical contact is removed.
-
-Pointy abstracts `mouseup` and `touchend` events.
+This event is fired when a pointer leaves the active state, and abstracts the `mouseup` and `touchend` events. For mouse devices, this is when the device goes from at least one button depressed to no buttons depressed. For touch and pen devices, this occurs when touch contact is removed.
 
 ##### pointercancel
 
-Dispatched when a pointer is determined to be unlikely to produce further events. Such as on a mobile device, when the user starts to touch and then proceeds to zoom or pan the page. Other times this may be triggered is when the device's screen orientation is changed while a pointer is active, the user starts using more inputs than the device supports (such as on five-finger contact screens and the user attempts to use more than five fingers).
+This event is fired when a pointer is determined to be unlikely to produce further events. For example, on a mobile device, this occurs when the user starts to touch and then proceeds to zoom or pan the page. Other times this may be triggered is when the device's screen orientation is changed while a pointer is active, or if the user starts using more inputs than the device supports (such as on five-finger contact screens and the user attempts to use more than five fingers).
 
-Pointy abstracts `touchcancel` events, there is no mouse equivalent. Pointy does not attempt detect situations that may cause a `pointercancel` event directly. User agents are responsible for determining when it thinks it should trigger cancel events, as such, each device may trigger cancel events for different reasons.
+While pointy.js abstracts `touchcancel` events, there is no mouse equivalent. pointy.js does not attempt to detect situations that may cause a `pointercancel` event directly. User agents are responsible for determining when it thinks it should trigger cancel events, as such, each device may trigger cancel events for different reasons.
 
 ##### pointermove
 
-Dispatched when a pointer changes coordinates, button state, pressure, tilt, or contact geometry.
-
-Pointy abstracts `mousemove` and `touchmove` events.
+This event abstracts the `mousemove` and `touchmove` events, and is fired when a pointer changes coordinates, button state, pressure, tilt, or contact geometry.
 
 ##### pointerover
 
-Dispatched when a pointing device is moved into the hit test boundaries of an element.
+This event abstracts `mouseover`, and is fired when a pointing device is moved into the hit test boundaries of an element.
 
-Pointy abstracts `mouseover`, there is no touch equivalent.
+Note: There is no touch equivalent for this event. 
 
 ##### pointerout
 
-Dispatched when a pointing device is moved out of the hit test boundaries of an element.
+This event abstracts `mouseout`, and is fired when a pointing device is moved out of the hit test boundaries of an element.
 
-Pointy abstracts `mouseout`, there is no touch equivalent.
+Note: There is no touch equivalent for this event. 
 
 ##### pointerenter
 
-Dispatched when a pointing device hits the boundaries of an element or one of its descendants.
-This is similar to `pointerover`, however `pointerover` does not consider descendants.
+This event is fired when a pointing device hits the boundaries of an element or one of its descendants. This is similar to `pointerover`, except that `pointerover` does not consider descendants.
 
-Pointy abstracts `MSPointerOver` for IE10, otherwise it uses jQuery's `mouseenter` polyfill, there is no touch equivalent.
+pointy.js abstracts `MSPointerOver` for IE10, otherwise it uses jQuery's `mouseenter` polyfill.
+
+There is no touch equivalent to this event.
 
 ##### pointerleave
 
-Dispatched when a pointing device is moved off of the hit test boundaries of an element and all of its descendants.
-This is similar to `pointerout`, however `pointerout` does not consider descendants.
+This event is fired when a pointing device leaves the hit test boundaries of an element and all of its descendants.
+This is similar to `pointerout`, except that `pointerout` does not consider descendants.
 
-Pointy abstracts `MSPointerOut` for IE10, otherwise it uses jQuery's `mouseleave` polyfill, there is no touch equivalent.
+pointy.js abstracts `MSPointerOut` for IE10, otherwise it uses jQuery's `mouseleave` polyfill
+
+There is no touch equivalent to this event.
 
 #### Included by pointy.gestures.js
 
-Pointy offers a gestures library which adds utilities similar to [jQuery mobile's touch events](http://api.jquerymobile.com/category/events).
+pointy.js offers a gestures library which adds utilities similar to [jQuery mobile's touch events](http://api.jquerymobile.com/category/events).
 
 ##### press
 
-Dispatched after a quick, complete interaction event. This is similar to JQM's `tap` event.
+This event is fired after a quick, complete interaction event. This is similar to JQM's `tap` event.
 
-A `press` is determined immediately upon `pointerend`, which means it fires without the 300ms delay on touch devices but by this time we have already determined it to be a complete interaction.
+A `press` is determined immediately upon `pointerend`, and avoids the 300ms delay on touch devices. pointy.js internally determines the interaction to be complete.
 
 ##### presshold
 
-Dispatched after a sustained complete interaction event. Sometimes referred to as a long press. This is similar to JQM's `taphold`.
+This event is fired after a sustained, complete interaction event (sometimes referred to as a long press). This is similar to JQM's `taphold`.
 
-A `presshold` is determined by holding without significant pointer movement for 750ms.
+A `presshold` is defined as a pointer being held in place without significant pointer movement for 750ms.
 
-`$.event.special.press.pressholdThreshold` (default 750) - This value dictates how long (in ms) the user must hold their press before the `presshold` event is dispatched.
+`$.event.special.press.pressholdThreshold` (default 750) - This value dictates how long (in ms) the user must hold their press before the `presshold` event is fired.
 
 ##### sweep
 
-Dispatched when a horizontal drag occurs within a short time duration. The event object will contain ``direction`` indicating right or left. This is similar to JQM's `swipe` event.
+This event is fired when a horizontal drag occurs within a short duration. The event object will contain ``direction`` indicating right or left. This is similar to JQM's `swipe` event.
 
 ##### sweepleft
 
-Dispatched when a sweep event occurs moving in the left direction. This is similar to JQM's `swipeleft` event.
+This event is fired when a `sweep` event occurs moving in the left direction. This is similar to JQM's `swipeleft` event.
 
 ##### sweepright
 
-Dispatched when a sweep event occurs moving in the right direction. This is similar to JQM's `swiperight` event.
+This event is fired when a `sweep` event occurs moving in the right direction. This is similar to JQM's `swiperight` event.
 
 ### The `touch-action` CSS property
 
-Pointy does not implement a polyfill for the `touch-action` CSS property. We recommend setting `touch-action` to `none` for all elements you indent to attach pointer events to through Pointy. This ensures you receive the same events across devices that support native pointer events and those that don't natively.
+pointy.js does not implement a polyfill for the `touch-action` CSS property. We recommend setting `touch-action` to `none` for all elements you indent to attach pointer events to through pointy.js. This ensures you receive the same events across devices that support native pointer events and those that don't natively.
 
 ### Event object
 
-The ``jQuery.Event`` object passed is modified by Pointy to standardize it between all the user input apis (mouse, touch and pointer events).
+The ``jQuery.Event`` object passed is modified by pointy.js to standardize it between all the user input APIs (mouse, touch and pointer events).
 
 #### Pointer Type
 
-``event.pointerType`` will be: touch, pen or mouse.
+``event.pointerType`` will be: `touch`, `pen`, or `mouse`.
 
 #### Buttons
 
-``event.buttons`` will be a bitmask of buttons currently depressed. [See spec](http://www.w3.org/TR/pointerevents/#chorded-button-interactions).
+``event.buttons`` is a bitmask of buttons currently depressed. [See spec](http://www.w3.org/TR/pointerevents/#chorded-button-interactions).
 
 Values:
 
@@ -169,27 +166,25 @@ Values:
 * ``18`` means the x1 (forward mouse button) is depressed.
 * ``32`` means the eraser button on a pen is depressed.
 
-The bitmask of these identifies which buttons are pressed, such as, if both the left and right mouse buttons are depressed ``event.buttons`` will be 3.
+The bitmask of these identifies which buttons are pressed. For example: if both the left and right mouse buttons are depressed, ``event.buttons`` will be 3.
 
 #### Pointer ID
 
-``event.pointerId`` standardized identifier to keep track of various pointers.
+``event.pointerId`` is a standardized identifier to keep track of various pointers.
 
-The ``pointerId`` is always 1 for the mouse. It however provides a unique identifer for touch-driven events, which you can compare across the pointerdown, pointermove and pointerend events to keep track of separate fingers.
+``pointerId`` is always 1 for a mouse. It however provides a unique identifer for touch-driven events, which you can compare across the `pointerdown`, `pointermove` and `pointerend` events to keep track of separate fingers.
 
-#### Pressure, Width, Height
+#### Pressure, width, height
 
-``event.pressure`` is a noramlized pressure of the pointer represented as a float in the range of [0,1]. When the hardware does not support pressure detection, the value will be 0.5 when any pointer is active (i.e. user is currently touching or a button is down) and 0 otherwise.
+``event.pressure`` is a normalized pressure of the pointer represented as a float in the range of [0,1]. When the hardware does not support pressure detection, the value will be 0.5 when any pointer is active (i.e. user is currently touching or a button is down) and 0 otherwise.
 
 ``event.width`` and ``event.height`` represent the contact geometry for a pointer. When the hardware cannot provide this, the value will be 0.
 
-#### Prevent Click
+#### Preventing click events
 
 ``event.preventClick()`` is a utility to stop the native click event that follows a pointer event.
 
-The click event is not always "prevented", in the cases where it cannot prevent it from being triggered it will render the event useless by calling `event.preventDefault()` and `event.stopPropagation()` from the click event itself.
-
-This is especially useful when attempting to prevent navigation from within a pointer event. An example of this:
+This utility especially useful when attempting to prevent navigation from within a pointer event. An example of this:
 
 ```js
 $('a').on('press', function (event) {
@@ -200,7 +195,9 @@ $('a').on('press', function (event) {
 });
 ```
 
-You can check whether the following click event has been prevented using ``event.isClickPrevented()``. These utilities can be used from `pointerdown`, `pointerup`, `pointermove`, `press`, `presshold`, `swipe`, `swipeleft`, and `swiperight`.
+You can check whether `preventClick()` has been called on a click event using ``event.isClickPrevented()``. These utilities can be used from `pointerdown`, `pointerup`, `pointermove`, `press`, `presshold`, `swipe`, `swipeleft`, and `swiperight`.
+
+Note: The click event cannot always be prevented completely. In cases where pointy.js cannot prevent it from being triggered, it will call `event.preventDefault()` and `event.stopPropagation()` on the event.
 
 ### Examples
 
@@ -228,7 +225,7 @@ $('a').on({
 });
 ```
 
-For more examples, look at [Skinny.js](https://github.com/vistaprint/SkinnyJS) which uses pointy.js within many of its plugins.
+For more examples, see [Skinny.js](https://github.com/vistaprint/SkinnyJS) which uses pointy.js within many of its plugins.
 
 ## Origin
 pointy.js was written at [Vistaprint](http://www.vistaprint.com).
