@@ -4,7 +4,9 @@
 
 pointy.js is a polyfill for the [pointer events API](http://www.w3.org/TR/pointerevents/). pointy.js targets support
 for all browsers including IE7+; it works by transforming touch and mouse events into pointer events on devices
-that don't natively support pointer events. All you need to do is bind to pointer events and let pointy.js do the rest.
+that don't natively support pointer events. 
+
+pointy.js allows you to attach only to pointer events and let it deal with support all the other types of events. You no longer need to handle mouse and touch events separately.
 
 pointy.js has no dependencies other than jQuery.
 
@@ -52,8 +54,6 @@ Additionally, pointy.guestures can be included, which supports a number of high-
 ```
 
 The script must me loaded prior to binding to any pointer events of any element on the page.
-
-pointy.js allows you to attach only to pointer events and let it deal with support all the other types of events. You no longer attach to mouse or touch events, only attach to pointer events.
 
 ### Events
 
