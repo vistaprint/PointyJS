@@ -12,7 +12,7 @@ pointy.js has no dependencies other than jQuery.
 
 ## Compatibility
 
-This library is developed by [Vistaprint](http://www.vistaprint.com) and is tried and tested. It should work on all browsers, however, we target support for the following browsers:
+This library is developed by [Vistaprint](http://www.vistaprint.com) and is used on our production website. Though it should work on all browsers, we specifically test against the following browsers:
 
 * Internet Explorer 7+
 * Chrome 11+
