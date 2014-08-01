@@ -187,9 +187,9 @@ The bitmask of these identifies which buttons are pressed. For example: if both 
 This utility especially useful when attempting to prevent navigation from within a pointer event. An example of this:
 
 ```js
-$('a').on('press', function (event) {
-	if (event.pointerType === 'touch') {
-		event.preventClick();
+$('a').on('press', function (e) {
+	if (e.pointerType === 'touch') {
+		e.preventClick();
 		toggleDropDownMenu();
 	}
 });
@@ -202,14 +202,15 @@ Note: The click event cannot always be prevented completely. In cases where poin
 ### Examples
 
 ```js
-$('a').on('pointerdown', function (event) {
+$('a').on('pointerdown', function (e) {
 
 	// Getting coordinates
-	var top = event.clientX;
-	var left = event.clientY;
+	var top = e.clientX;
+	var left = e.clientY;
 
 	// Detecting the underlying event
-	var underlyingEvent = e.originalEvent; // could be a MouseDown event, TouchStart event, or actual PointerDown event.
+	// This could be a mousedown, touchstart, or actual pointerdown event.
+	var underlyingEvent = e.originalEvent; 
 
 	// continue on your way...
 });
