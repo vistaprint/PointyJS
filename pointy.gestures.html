@@ -69,25 +69,45 @@
 
 <p>jQuery.pointerGestures is a set of jQuery custom events that mimic <a href='http://api.jquerymobile.com/category/events/'>jQuery mobile&#8217;s touch events</a> which also support the <a href='http://www.w3.org/Submission/pointer-events/'>pointer events api</a>.</p>
 
-<h3 id='event_types'>Event types</h3>
+<h3 id='inclusion'>Inclusion</h3>
 
-<ul>
-<li>sweep: Triggered when a horizontal drag of 30px or more (and less than 75px vertically) occurs within 1 second duration.</li>
+<p>Include pointy.gestures.js immediately after pointy.js in your JavaScript bundle HTML page:</p>
+<div class='highlight'><pre><code class='html'><span class='c'>&lt;!-- pointy.js requires jQuery --&gt;</span>
+<span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span> <span class='na'>src=</span><span class='s'>&quot;/path/to/pointy.js&quot;</span><span class='nt'>&gt;&lt;/script&gt;</span>
 
-<li>sweepleft: Triggered when a sweep event occurs moving in the left direction.</li>
-
-<li>sweepright: Triggered when a swipe event occurs moving in the right direction.</li>
-
-<li>press: Triggered after a quick, complete touch or click event.</li>
-
-<li>presshold: Triggered after a sustained complete touch event.</li>
-</ul>
-
-<h3 id='usage'>Usage</h3>
-<div class='highlight'><pre><code class='javascript'>    <span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;#el&#39;</span><span class='p'>).</span><span class='nx'>on</span><span class='p'>(</span><span class='s1'>&#39;presshold&#39;</span><span class='p'>,</span> <span class='kd'>function</span> <span class='p'>(</span><span class='nx'>e</span><span class='p'>)</span> <span class='p'>{</span>
-        <span class='nx'>alert</span><span class='p'>(</span><span class='s1'>&#39;Don\&#39;t be trying to hold me down!&#39;</span><span class='p'>);</span>
-    <span class='p'>});</span>
+<span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&quot;text/javascript&quot;</span> <span class='na'>src=</span><span class='s'>&quot;/path/to/pointy.gestures.js&quot;</span><span class='nt'>&gt;&lt;/script&gt;</span>
 </code></pre></div>
+<p>The script must me loaded prior to binding to any pointer events of any element on the page.</p>
+
+<p>pointy.js allows you to attach only to pointer events and let it deal with support all the other types of events. You no longer attach to mouse or touch events, only attach to pointer events.</p>
+
+<h2 id='events'>Events</h2>
+
+<h5 id='press'>press</h5>
+
+<p>This event is fired after a quick, complete interaction event. This is similar to JQM&#8217;s <code>tap</code> event.</p>
+
+<p>A <code>press</code> is determined immediately upon <code>pointerend</code>, and avoids the 300ms delay on touch devices. pointy.js internally determines the interaction to be complete.</p>
+
+<h5 id='presshold'>presshold</h5>
+
+<p>This event is fired after a sustained, complete interaction event (sometimes referred to as a long press). This is similar to JQM&#8217;s <code>taphold</code>.</p>
+
+<p>A <code>presshold</code> is defined as a pointer being held in place without significant pointer movement for 750ms.</p>
+
+<p><code>$.event.special.press.pressholdThreshold</code> (default 750) - This value dictates how long (in ms) the user must hold their press before the <code>presshold</code> event is fired.</p>
+
+<h5 id='sweep'>sweep</h5>
+
+<p>This event is fired when a horizontal drag occurs within a short duration. The event object will contain <code>direction</code> indicating right or left. This is similar to JQM&#8217;s <code>swipe</code> event.</p>
+
+<h5 id='sweepleft'>sweepleft</h5>
+
+<p>This event is fired when a <code>sweep</code> event occurs moving in the left direction. This is similar to JQM&#8217;s <code>swipeleft</code> event.</p>
+
+<h5 id='sweepright'>sweepright</h5>
+
+<p>This event is fired when a <code>sweep</code> event occurs moving in the right direction. This is similar to JQM&#8217;s <code>swiperight</code> event.</p>
   </div>
 </div>
  
