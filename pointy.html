@@ -187,9 +187,9 @@
 <p><code>event.preventClick()</code> is a utility to stop the native click event that follows a pointer event.</p>
 
 <p>This utility especially useful when attempting to prevent navigation from within a pointer event. An example of this:</p>
-<div class='highlight'><pre><code class='javascript'><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;a&#39;</span><span class='p'>).</span><span class='nx'>on</span><span class='p'>(</span><span class='s1'>&#39;press&#39;</span><span class='p'>,</span> <span class='kd'>function</span> <span class='p'>(</span><span class='nx'>event</span><span class='p'>)</span> <span class='p'>{</span>
-	<span class='k'>if</span> <span class='p'>(</span><span class='nx'>event</span><span class='p'>.</span><span class='nx'>pointerType</span> <span class='o'>===</span> <span class='s1'>&#39;touch&#39;</span><span class='p'>)</span> <span class='p'>{</span>
-		<span class='nx'>event</span><span class='p'>.</span><span class='nx'>preventClick</span><span class='p'>();</span>
+<div class='highlight'><pre><code class='javascript'><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;a&#39;</span><span class='p'>).</span><span class='nx'>on</span><span class='p'>(</span><span class='s1'>&#39;press&#39;</span><span class='p'>,</span> <span class='kd'>function</span> <span class='p'>(</span><span class='nx'>e</span><span class='p'>)</span> <span class='p'>{</span>
+	<span class='k'>if</span> <span class='p'>(</span><span class='nx'>e</span><span class='p'>.</span><span class='nx'>pointerType</span> <span class='o'>===</span> <span class='s1'>&#39;touch&#39;</span><span class='p'>)</span> <span class='p'>{</span>
+		<span class='nx'>e</span><span class='p'>.</span><span class='nx'>preventClick</span><span class='p'>();</span>
 		<span class='nx'>toggleDropDownMenu</span><span class='p'>();</span>
 	<span class='p'>}</span>
 <span class='p'>});</span>
@@ -199,14 +199,15 @@
 <p>Note: The click event cannot always be prevented completely. In cases where pointy.js cannot prevent it from being triggered, it will call <code>event.preventDefault()</code> and <code>event.stopPropagation()</code> on the event.</p>
 
 <h3 id='examples'>Examples</h3>
-<div class='highlight'><pre><code class='javascript'><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;a&#39;</span><span class='p'>).</span><span class='nx'>on</span><span class='p'>(</span><span class='s1'>&#39;pointerdown&#39;</span><span class='p'>,</span> <span class='kd'>function</span> <span class='p'>(</span><span class='nx'>event</span><span class='p'>)</span> <span class='p'>{</span>
+<div class='highlight'><pre><code class='javascript'><span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;a&#39;</span><span class='p'>).</span><span class='nx'>on</span><span class='p'>(</span><span class='s1'>&#39;pointerdown&#39;</span><span class='p'>,</span> <span class='kd'>function</span> <span class='p'>(</span><span class='nx'>e</span><span class='p'>)</span> <span class='p'>{</span>
 
 	<span class='c1'>// Getting coordinates</span>
-	<span class='kd'>var</span> <span class='nx'>top</span> <span class='o'>=</span> <span class='nx'>event</span><span class='p'>.</span><span class='nx'>clientX</span><span class='p'>;</span>
-	<span class='kd'>var</span> <span class='nx'>left</span> <span class='o'>=</span> <span class='nx'>event</span><span class='p'>.</span><span class='nx'>clientY</span><span class='p'>;</span>
+	<span class='kd'>var</span> <span class='nx'>top</span> <span class='o'>=</span> <span class='nx'>e</span><span class='p'>.</span><span class='nx'>clientX</span><span class='p'>;</span>
+	<span class='kd'>var</span> <span class='nx'>left</span> <span class='o'>=</span> <span class='nx'>e</span><span class='p'>.</span><span class='nx'>clientY</span><span class='p'>;</span>
 
 	<span class='c1'>// Detecting the underlying event</span>
-	<span class='kd'>var</span> <span class='nx'>underlyingEvent</span> <span class='o'>=</span> <span class='nx'>e</span><span class='p'>.</span><span class='nx'>originalEvent</span><span class='p'>;</span> <span class='c1'>// could be a MouseDown event, TouchStart event, or actual PointerDown event.</span>
+	<span class='c1'>// This could be a mousedown, touchstart, or actual pointerdown event.</span>
+	<span class='kd'>var</span> <span class='nx'>underlyingEvent</span> <span class='o'>=</span> <span class='nx'>e</span><span class='p'>.</span><span class='nx'>originalEvent</span><span class='p'>;</span> 
 
 	<span class='c1'>// continue on your way...</span>
 <span class='p'>});</span>
