@@ -32,7 +32,7 @@ pointy.js even supports IE10, which implemented MSPointerEvents prior to the W3C
 
 pointy.js is also useful when working with devices that support pointer events natively. It adds utilities and standardizes events similar to how jQuery does with mouse events.
 
-### Handles edge-cases well
+### Simplifies programming against mouse/touch
 
 There are numerous edge cases which arise when handling both mouse and touch events. For example: when calling ``preventDefault()`` on a ``touchstart`` or ``touchend`` event, pointy.js will prevent the emulated mouse event that follows (mousedown and mouseup, respectively), and also prevents the native click event from being triggered. In contrast, calling ``preventDefault`` on a ``mousedown`` or ``mouseup`` event does not prevent the native click event from firing. Additionally, there is no native way to cancel the click event from being triggered from pointer events. pointy.js fixes this by adding the utility method ``preventClick()`` to the event object.
 
