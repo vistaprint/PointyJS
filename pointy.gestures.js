@@ -176,6 +176,7 @@
                     // Trigger a "press" event if the start target is the same as the stop target.
                     if (!isPresshold && origTarget === event.target) {
                         event.type = "press";
+                        event.isPropagationStopped = function () { return false; };
                         $.event.dispatch.call(thisObject, event);
                     }
 
