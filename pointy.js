@@ -396,6 +396,11 @@
 
                 // set the scroll offset which is compared on TouchEnd
                 _startScrollOffset = scrollY();
+
+                // prevent default to prevent the emulated "mousedown" event from being triggered
+                // this also would usually prevent the click event that is triggered by a touch event,
+                // however we trigger a click event on touchend for consistency
+                event.preventDefault();
             },
             mouse: function (event) {
                 // if we just had a touchstart, ignore this MouseDown event, to prevent double firing of PointerDown
