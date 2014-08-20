@@ -19,6 +19,7 @@
 
         event.type = type;
         event.isPropagationStopped = function () { return false; };
+        event.isDefaultPrevented = function () { return false; };
 
         if (extras) {
             $.extend(event, extras);
