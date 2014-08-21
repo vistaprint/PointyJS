@@ -239,8 +239,8 @@
                 event.width = event.height = 0;
             }
 
-            // prevent the follow native click event from occurring, can be used to prevent
-            // clicks on pointerdown or pointerup or from gestures like press and presshold
+            // prevent the following native "click" event from occurring, can be used to prevent
+            // clicks on "pointerdown" or "pointerup" or from gestures like "press" and "presshold"
             event.preventClick = function () {
                 event.isClickPrevented = returnTrue;
                 $(event.target).one("click", returnFalse);
@@ -255,10 +255,10 @@
                 var events = [];
                 var ev, i, j;
 
-                // the problem with this is that on touchend it will remove the
+                // the problem with this is that on "touchend" it will remove the
                 // touch which has ended from the touches list, this means we do
-                // not want to fire pointerup for touches that are still there,
-                // we instead want to send a pointerup with the removed touch's identifier
+                // not want to fire "pointerup" for touches that are still there,
+                // we instead want to send a "pointerup" with the removed touch's identifier
                 if (event.type === "pointerup") {
                     // convert TouchList to a standard array
                     _lastTouches = Array.prototype.slice.call(_lastTouches);
@@ -279,8 +279,9 @@
                         return event;
                     }
                 }
-                // on pointerdown we need to only trigger a new pointerdown for the touch,
-                // and not the touches that were already there
+                // on "pointerdown" we need to only trigger a new "pointerdown" for the new touches (fingers),
+                // and not the touches that were already active. Therefore we filter out all of the touches
+                // based on their identifier that we already knew were active before
                 else if (event.type === "pointerdown") {
                     // convert TouchList to a standard array
                     touches = Array.prototype.slice.call(original.touches);
@@ -377,7 +378,7 @@
     // if browser does not natively handle pointer events,
     // create special custom events to mimic them
     if (!support.pointer) {
-        // stores the scroll-y offest on touchstart and is compared
+        // stores the scroll-y offest on "touchstart" and is compared
         // on touchend to see if we should trigger a click event
         var _startScrollOffset;
 
@@ -391,7 +392,7 @@
                 // set the pointer as currently down to prevent chorded PointerDown events
                 _touching = true;
 
-                // trigger a new PointerDown event
+                // trigger a new "pointerdown" event
                 triggerCustomEvent(this, "pointerdown", event);
 
                 // set the scroll offset which is compared on TouchEnd
@@ -416,9 +417,10 @@
                 var wasAButtonDownAlready = _buttons !== 0;
                 _buttons |= button;
 
-                // do not trigger another PointerDown event if currently down, prevent chorded PointerDown events
+                // do not trigger another "pointerdown" event if a button is currently down,
+                // this prevents chorded "pointerdown" events which is defined in the Pointer Events spec
                 if (wasAButtonDownAlready && _buttons !== button) {
-                    // per the Pointer Events spec, when the active buttons change it fires only a PointerMove event
+                    // per the Pointer Events spec, when the active buttons change it fires only a "pointermove" event
                     triggerCustomEvent(this, "pointermove", event);
                     return;
                 }
@@ -465,7 +467,7 @@
                     return;
                 }
 
-                // indicate that currently release the pointerdown lock
+                // indicate that currently release the "pointerdown" lock
                 _touching = false;
 
                 var jEvent = triggerCustomEvent(this, "pointerup", event);
@@ -513,7 +515,7 @@
 
                 _buttons ^= getStandardizedButtonsProperty(event);
 
-                // we only trigger a PointerUp event if no buttons are down, prevent chorded PointerDown events
+                // we only trigger a "pointerup" event if no buttons are down, prevent chorded PointerDown events
                 if (_buttons === 0) {
                     triggerCustomEvent(this, "pointerup", event);
                 } else {
@@ -521,8 +523,8 @@
                     triggerCustomEvent(this, "pointermove", event);
                 }
 
-                // Mouse Events spec shows that after a MouseUp it fires a MouseMove, which will trigger
-                // the PointerMove needed to follow the Pointer Events spec which describes the same thing
+                // Mouse Events spec shows that after a "mouseup" it fires a "mousemove", which will trigger
+                // the "pointermove" needed to follow the Pointer Events spec which describes the same thing
             },
             add: $.event.delegateSpecial(function (handleObj) {
                 // bind to touch events, some devices (chromebook) can send both touch and mouse events
