@@ -151,7 +151,7 @@
 
     // indicator to mark whether touch events are in progress
     // when null, it means we have never received a touch event
-    // when true, user is currently touching something
+    // when number, user is currently touching something
     // when false, user just released their finger (reset on mousedown if needed)
     var _touching = null;
 
@@ -389,8 +389,8 @@
 
         $.event.special.pointerdown = {
             touch: function (event) {
-                // set the pointer as currently down to prevent chorded PointerDown events
-                _touching = true;
+                // set the pointer as currently down to prevent chorded "pointerdown" events
+                _touching = event.timeStamp;
 
                 // trigger a new "pointerdown" event
                 triggerCustomEvent(this, "pointerdown", event);
@@ -398,14 +398,12 @@
                 // set the scroll offset which is compared on TouchEnd
                 _startScrollOffset = scrollY();
 
-                // prevent default to prevent the emulated "mousedown" event from being triggered
-                // this also would usually prevent the click event that is triggered by a touch event,
-                // however we trigger a click event on touchend for consistency
-                event.preventDefault();
+                // no matter what, you cannot simply always call preventDefault() on "touchstart"
+                // this disables scrolling when touching the binded element, which is not appropriate.
             },
             mouse: function (event) {
-                // if we just had a touchstart, ignore this MouseDown event, to prevent double firing of PointerDown
-                if (_touching === true) {
+                // if we just had a "touchstart", ignore this "mousedown" event, to prevent double firing of "pointerdown"
+                if (typeof _touching === 'number') {
                     return;
                 }
 
@@ -467,49 +465,82 @@
                     return;
                 }
 
-                // indicate that currently release the "pointerdown" lock
-                _touching = false;
+                // timeStamp of when the last "touchstart" event was triggered,
+                // used to prevent double fire issues on iOS 7+ devices when needed
+                var lastTouchStarted = _touching;
 
+                // trigger the emulated "pointerup" event, getting back the event
                 var jEvent = triggerCustomEvent(this, "pointerup", event);
 
-                // if we are preventing the next click event, then simply don't trigger one below
-                if (jEvent.isClickPrevented()) {
-                    $(event.target).off("click", returnFalse);
+                // ensure we have a target before we attempt to deal with a "click" event
+                if (!event.target) {
+                    _touching = false; // release the "pointerdown" lock
                     return;
                 }
+
+                // while you may think if we are preventing the next "click" event (see jEvent.isClickPrevented)
+                // we could simply not trigger one below, that turns out to be a bad assumption. Due to the
+                // complex issue of dealing with various devices, often a click event is triggered regardless of
+                // calling preventDefault on "touchend" so we have to still go on and determine if a "click"
+                // event was triggered, if so, render it noop, if not, we don't have to trigger one then.
+
+                // we confirm that the user did not scroll, as touch events are very related to scrolling on
+                // touch devices, it's possible we may mis-fire a click event on an <a> anchor tag causing
+                // navigation even though this was a scroll attempt. We let the browser's built in scrolling
+                // threshold prevent accidental scrolling so we only need to check if they scrolled at all.
+                if (_startScrollOffset !== scrollY()) {
+                    _touching = false; // release the "pointerdown" lock
+                    return;
+                }
+
 
                 // on "touchend", calling prevent default prevents the "mouseup" and "click" event
                 // however on native "mouseup" events preventing default does not cancel the "click" event
                 // as per the pointer event spec on "pointerup" preventing default should not cancel the "click" event
                 //
-                // we really do want to call this all the time, because if the function binded to this emulated
-                // "poiunterup" triggered above called prevent default it would also prevent the click, which
-                // would cause inconsistent behavior. To prevent the possibility of two click events though,
-                // we want to call prevent default all the time (as we do above) and then force trigger the click here
+                // so we really want to have a "click" event all the time. If a function binded to this emulated
+                // "poiunterup" calls prevent default it would result in preventing the "click" event, which would
+                // cause inconsistent behavior. To prevent the possibility of two click events though, we call
+                // prevent default all the time (see above) and then trigger a "click" event here.
                 //
-                // we confirm that the user did not scroll, as touch events are very related to scrolling on
-                // touch devices, it's possible we may mis-fire a click event on an <a> anchor tag causing
-                // navigation even though this was a scroll attempt. Do the the browser's built in threshold
-                // to prevent accidental scrolling we do not add a threshold here.
-                if (event.target && event.target.click && _startScrollOffset === scrollY()) {
-                    event.target.click();
-                }
+                // Additionally, we are currently looking at the "touchend" event, mobile devices usually add a 300ms
+                // delay before triggering click to check for double tap events (zooming action on most devices).
+                // In certain situations the mobile device will still fire a "click" event even if preventDefault is
+                // called on "touchend", so we wait the 300ms and look for a click, then only fire a click if none
+                // was fired by the browser
+                var clickTimer = setTimeout(function () {
+                    if (_touching === lastTouchStarted) {
+                        _touching = false; // release the "pointerdown" lock
+                    }
 
-                // on iOS 5 there is no native click function on elements, therefore we need to let jQuery handle it (AR-16405)
-                // on Android 4.1, you cannot prevent it from firing the native click event on touchend (GD-155106)
-                else if (event.target && _startScrollOffset === scrollY()) {
-                    var clickTimer = setTimeout(function () {
+                    // at this point, if no click event was triggered, and we don't want to to trigger a "click"
+                    // event, we can simply not trigger one to begin with.
+                    if (jEvent.isClickPrevented()) {
+                        $(event.target).off("click", returnFalse);
+                        return;
+                    }
+
+                    if (event.target.click) {
+                        event.target.click();
+                    } else {
+                        // iOS 5 and older Android browsers do not define native .click events on all elements
                         $(event.target).click();
-                    }, 200);
+                    }
+                }, 300);
 
-                    $(event.target).one("click", function () {
+                $(event.target).one("click", function () {
+                    if (_touching === lastTouchStarted) {
+                        _touching = false;
+                    }
+
+                    if (clickTimer) {
                         clearTimeout(clickTimer);
-                    });
-                }
+                    }
+                });
             },
             mouse: function (event) {
-                // if originally we had a TouchStart or we ended with a TouchEnd event, ignore this MouseUp
-                if (_touching === false) {
+                // if originally we had a "touchstart" or we ended with a "touchend" event, ignore this "mouseup"
+                if (_touching !== null) {
                     return;
                 }
 
@@ -551,11 +582,11 @@
                 triggerCustomEvent(this, "pointermove", event);
             },
             mouse: function (event) {
-                // _touching will be true if they currently have their finger (touch only) down
+                // _touching will be a number if they currently have their finger (touch only) down
                 // because we cannot call preventDefault on the "touchmove" without preventing
                 // scrolling on most things, we do this check to ensure we don't double fire
                 // move events.
-                if (_touching === true) {
+                if (typeof _touching === 'number') {
                     return;
                 }
 
