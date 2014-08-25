@@ -624,6 +624,12 @@
             }
         }, function (pointerEventType, natives) {
             function onTouch(event) {
+                // pointercancel, reset everything
+                if (event.type === "touchcancel") {
+                    _touching = null;
+                    _buttons = 0;
+                }
+
                 triggerCustomEvent(this, pointerEventType, event);
             }
 

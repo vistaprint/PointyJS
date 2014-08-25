@@ -1,83 +1,83 @@
 describe('pointy.js', function () {
     var el = $('#test');
 
-    // ensure we turn off all pointer events
-    function offs() {
-        el.off('pointerdown').off('pointerup').off('pointermove');
-    }
+    var isCalled = function (pointerEvent, nativeEvent, teardown) {
+        var called = false;
 
-    function test(pointerEvent, nativeEvents) {
-        var groovy = false,
-            teardown = true;
-
-        function workIt() {
-            if (groovy) {
-                chai.assert.fail();
+        function flagIfCalled() {
+            if (called) {
+                chai.assert.fail('should never call this flag write');
                 teardown = false;
             }
 
-            groovy = true;
+            called = true;
         }
 
         // bind to the pointer event
-        el.on(pointerEvent, workIt);
+        el.on(pointerEvent, flagIfCalled);
 
-        // run all the native events that map to this pointer event
-        $.each(nativeEvents, function (i, nativeEvent) {
-            it('should call a ' + pointerEvent + ' when a ' + nativeEvent + ' is triggered', function () {
-                // reset groovy here for this next test
-                groovy = false;
+        // trigger native event, should trigger the pointer event and call workIt
+        el.triggerNative(nativeEvent);
 
-                // trigger native event, should trigger the pointer event and call workIt
-                el.triggerNative(nativeEvent);
+        // confirm workIt was called
+        chai.assert.isTrue(called);
 
-                // confirm workIt was called
-                chai.assert.isTrue(groovy);
-            });
+        if (teardown) {
+            // ensure that you can teardown (unbind) the pointer event
+            el.off(pointerEvent, flagIfCalled);
 
-            // we have a special case for the touchstart to prevent mousedown
-            if (pointerEvent == 'pointerdown' && nativeEvent == 'touchstart') {
-                it('calling touchstart should prevent the next mousedown event', function () {
-                    groovy = false;
-                    el.triggerNative('mousedown');
-                    chai.assert.isFalse(groovy);
-                });
-            }
-        });
-
-        // ensure that you can teardown (unbind) the pointer event
-        it('teardown ' + pointerEvent, function () {
-            el.off(pointerEvent, workIt);
-
-            $.each(nativeEvents, function (i, nativeEvent) {
-                el.triggerNative(nativeEvent);
-            });
+            el.triggerNative(nativeEvent);
 
             chai.assert.isTrue(teardown);
+        }
+    };
+
+    describe('touch transformation', function () {
+        it('should trigger a pointerdown when a touchstart is triggered', function () {
+            isCalled('pointerdown', 'touchstart', true);
         });
-    }
 
-    describe('pointerdown', function () {
-        test('pointerdown', ['mousedown', 'touchstart']);
+        it('should trigger a pointermove when a touchmove is triggered', function () {
+            isCalled('pointermove', 'touchmove', true);
+        });
 
-        // send a pointerup event to clear the event state
-        el.triggerNative('mouseup');
+        it('should trigger a pointerup when a touchend is triggered', function () {
+            isCalled('pointerup', 'touchend', true);
+        });
+
+        it('should trigger a pointercancel when a touchcancel is triggered', function () {
+            isCalled('pointercancel', 'touchcancel', true);
+        });
     });
 
-    describe('pointerup', function () {
-        test('pointerup', ['mouseup', 'touchend']);
-    });
+    describe('mouse transformation', function () {
+        it('should trigger a pointerdown when a mousedown is triggered', function () {
+            isCalled('pointerdown', 'mousedown', true);
+        });
 
-    describe('pointermove', function () {
-        test('pointermove', ['touchmove', 'mousemove']);
-    });
+        it('should trigger a pointermove when a mousemove is triggered', function () {
+            isCalled('pointermove', 'mousemove', true);
+        });
 
-    describe('hover (pointerover, pointerout)', function () {
-        test('pointerover', ['mouseover']);
-        test('pointerout', ['mouseout']);
+        it('should trigger a pointerover when a mouseover is triggered', function () {
+            isCalled('pointerover', 'mouseover', true);
+        });
+
+        it('should trigger a pointerout when a mouseout is triggered', function () {
+            isCalled('pointerout', 'mouseout');
+        });
+
+        it('should trigger a pointerup when a mouseup is triggered', function () {
+            isCalled('pointerup', 'mouseup', true);
+        });
     });
 
     describe('buttons property', function () {
+        // ensure we turn off all pointer events
+        function offs() {
+            el.off('pointerdown').off('pointerup').off('pointermove');
+        }
+
         it('on pointerdown, buttons should be 1 to indicate left mouse button', function () {
             offs();
 
