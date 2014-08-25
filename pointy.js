@@ -225,7 +225,7 @@
 
             // if we have the bitmask for the depressed buttons from the mouse events polyfill, use it to mimic buttons for
             // browsers that do not support the HTML DOM LEVEL 3 events spec
-            if (event.type === "pointermove" && _touching === null && _buttons !== event.buttons) {
+            if (event.type !== "pointerdown" && event.pointerType === "mouse" && _touching === null && _buttons !== event.buttons) {
                 event.buttons = _buttons;
             }
 
@@ -493,7 +493,6 @@
                     return;
                 }
 
-
                 // on "touchend", calling prevent default prevents the "mouseup" and "click" event
                 // however on native "mouseup" events preventing default does not cancel the "click" event
                 // as per the pointer event spec on "pointerup" preventing default should not cancel the "click" event
@@ -544,6 +543,7 @@
                     return;
                 }
 
+                // on mouseup, the event.button will be the button that was just released
                 _buttons ^= getStandardizedButtonsProperty(event);
 
                 // we only trigger a "pointerup" event if no buttons are down, prevent chorded PointerDown events

@@ -1,24 +1,33 @@
 describe('pointy.js', function () {
     var el = $('#test');
 
-    var isCalled = function (pointerEvent, nativeEvent) {
+    var isCalled = function (pointerEvent, nativeEvent, nativeEventProps, cb) {
         var called = false;
         var teardown = true;
 
-        function flagIfCalled() {
+        if ($.isFunction(nativeEventProps)) {
+            cb = nativeEventProps;
+            nativeEventProps = null;
+        }
+
+        function flagIfCalled(event) {
             if (called) {
                 chai.assert.fail('should never call this flag write');
                 teardown = false;
             }
 
             called = true;
+
+            if (cb) {
+                cb(event);
+            }
         }
 
         // bind to the pointer event
         el.on(pointerEvent, flagIfCalled);
 
         // trigger native event, should trigger the pointer event and call workIt
-        el.triggerNative(nativeEvent);
+        el.triggerNative(nativeEvent, nativeEventProps);
 
         // confirm flagIfCalled was called
         chai.assert.isTrue(called);
@@ -35,41 +44,67 @@ describe('pointy.js', function () {
 
     describe('touch transformation', function () {
         it('should trigger a pointerdown when a touchstart is triggered', function () {
-            isCalled('pointerdown', 'touchstart');
+            isCalled('pointerdown', 'touchstart', function (event) {
+                chai.assert.equal(event.pointerType, 'touch');
+                chai.assert.equal(event.buttons, 1);
+            });
         });
 
         it('should trigger a pointermove when a touchmove is triggered', function () {
-            isCalled('pointermove', 'touchmove');
+            isCalled('pointermove', 'touchmove', function (event) {
+                chai.assert.equal(event.pointerType, 'touch');
+                chai.assert.equal(event.buttons, 1);
+            });
         });
 
         it('should trigger a pointerup when a touchend is triggered', function () {
-            isCalled('pointerup', 'touchend');
+            isCalled('pointerup', 'touchend', function (event) {
+                chai.assert.equal(event.pointerType, 'touch');
+                chai.assert.equal(event.buttons, 0);
+            });
         });
 
         it('should trigger a pointercancel when a touchcancel is triggered', function () {
-            isCalled('pointercancel', 'touchcancel');
+            isCalled('pointercancel', 'touchcancel', function (event) {
+                chai.assert.equal(event.pointerType, 'touch');
+            });
         });
     });
 
     describe('mouse transformation', function () {
         it('should trigger a pointerdown when a mousedown is triggered', function () {
-            isCalled('pointerdown', 'mousedown');
+            isCalled('pointerdown', 'mousedown', { button: 1 }, function (event) {
+                chai.assert.equal(event.pointerType, 'mouse');
+                chai.assert.equal(event.buttons, 1);
+            });
         });
 
         it('should trigger a pointermove when a mousemove is triggered', function () {
-            isCalled('pointermove', 'mousemove');
+            isCalled('pointermove', 'mousemove', function (event) {
+                chai.assert.equal(event.pointerType, 'mouse');
+                chai.assert.equal(event.buttons, 1);
+            });
         });
 
         it('should trigger a pointerover when a mouseover is triggered', function () {
-            isCalled('pointerover', 'mouseover');
+            isCalled('pointerover', 'mouseover', function (event) {
+                chai.assert.equal(event.pointerType, 'mouse');
+                chai.assert.equal(event.buttons, 1);
+            });
         });
 
         it('should trigger a pointerout when a mouseout is triggered', function () {
-            isCalled('pointerout', 'mouseout');
+            isCalled('pointerout', 'mouseout', function (event) {
+                chai.assert.equal(event.pointerType, 'mouse');
+                chai.assert.equal(event.buttons, 1);
+            });
         });
 
         it('should trigger a pointerup when a mouseup is triggered', function () {
-            isCalled('pointerup', 'mouseup');
+            isCalled('pointerup', 'mouseup', { button: 1 }, function (event) {
+                chai.assert.equal(event.pointerType, 'mouse');
+                chai.assert.equal(event.buttons, 0);
+            });
         });
     });
 
