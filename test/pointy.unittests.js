@@ -1,8 +1,9 @@
 describe('pointy.js', function () {
     var el = $('#test');
 
-    var isCalled = function (pointerEvent, nativeEvent, teardown) {
+    var isCalled = function (pointerEvent, nativeEvent) {
         var called = false;
+        var teardown = true;
 
         function flagIfCalled() {
             if (called) {
@@ -34,33 +35,33 @@ describe('pointy.js', function () {
 
     describe('touch transformation', function () {
         it('should trigger a pointerdown when a touchstart is triggered', function () {
-            isCalled('pointerdown', 'touchstart', true);
+            isCalled('pointerdown', 'touchstart');
         });
 
         it('should trigger a pointermove when a touchmove is triggered', function () {
-            isCalled('pointermove', 'touchmove', true);
+            isCalled('pointermove', 'touchmove');
         });
 
         it('should trigger a pointerup when a touchend is triggered', function () {
-            isCalled('pointerup', 'touchend', true);
+            isCalled('pointerup', 'touchend');
         });
 
         it('should trigger a pointercancel when a touchcancel is triggered', function () {
-            isCalled('pointercancel', 'touchcancel', true);
+            isCalled('pointercancel', 'touchcancel');
         });
     });
 
     describe('mouse transformation', function () {
         it('should trigger a pointerdown when a mousedown is triggered', function () {
-            isCalled('pointerdown', 'mousedown', true);
+            isCalled('pointerdown', 'mousedown');
         });
 
         it('should trigger a pointermove when a mousemove is triggered', function () {
-            isCalled('pointermove', 'mousemove', true);
+            isCalled('pointermove', 'mousemove');
         });
 
         it('should trigger a pointerover when a mouseover is triggered', function () {
-            isCalled('pointerover', 'mouseover', true);
+            isCalled('pointerover', 'mouseover');
         });
 
         it('should trigger a pointerout when a mouseout is triggered', function () {
@@ -68,7 +69,7 @@ describe('pointy.js', function () {
         });
 
         it('should trigger a pointerup when a mouseup is triggered', function () {
-            isCalled('pointerup', 'mouseup', true);
+            isCalled('pointerup', 'mouseup');
         });
     });
 
