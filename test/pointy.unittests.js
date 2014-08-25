@@ -19,7 +19,7 @@ describe('pointy.js', function () {
         // trigger native event, should trigger the pointer event and call workIt
         el.triggerNative(nativeEvent);
 
-        // confirm workIt was called
+        // confirm flagIfCalled was called
         chai.assert.isTrue(called);
 
         if (teardown) {
