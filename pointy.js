@@ -403,7 +403,7 @@
             },
             mouse: function (event) {
                 // if we just had a "touchstart", ignore this "mousedown" event, to prevent double firing of "pointerdown"
-                if (typeof _touching === 'number') {
+                if (typeof _touching === "number") {
                     return;
                 }
 
@@ -586,7 +586,7 @@
                 // because we cannot call preventDefault on the "touchmove" without preventing
                 // scrolling on most things, we do this check to ensure we don't double fire
                 // move events.
-                if (typeof _touching === 'number') {
+                if (typeof _touching === "number") {
                     return;
                 }
 
