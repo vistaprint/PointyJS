@@ -163,7 +163,7 @@ Values:
 * ``2`` means the right-mouse button is depressed.
 * ``4`` means the middle-mouse button is depressed.
 * ``8`` means the x1 (back mouse button) is depressed.
-* ``18`` means the x1 (forward mouse button) is depressed.
+* ``16`` means the x1 (forward mouse button) is depressed.
 * ``32`` means the eraser button on a pen is depressed.
 
 The bitmask of these identifies which buttons are pressed. For example: if both the left and right mouse buttons are depressed, ``event.buttons`` will be 3.
