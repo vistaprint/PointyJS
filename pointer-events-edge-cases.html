@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+	<script type="text/javascript" src="javascripts/jquery.js"></script>
+	<script type="text/javascript" src="dist/pointy.js"></script>
+	<script type="text/javascript" src="dist/pointy.gestures.js"></script>
+	<script type="text/javascript">
+		function log(e, log)
+		{
+			var text = e.timeStamp + ': ' + e.type;
+
+			if (/^pointer/.test(e.type)) {
+				text += '|' + e.pointerType + '|' + e.pointerId + '|' + e.buttons;
+			}
+
+			$('<li>').text(text).appendTo($('#log-' + log));
+			console.log(e.target, e.type, e.pointerType, e);
+		}
+
+		$(function()
+		{
+			function bindAll(el, logType, cb) {
+				function customLog(e) {
+					log(e, logType);
+					if (cb) {
+						cb(e);
+					}
+				}
+
+				return $(el).on({
+					touchstart: customLog,
+					touchend: customLog,
+					mouseup: customLog,
+					mousedown: customLog,
+					click: customLog,
+					dblclick: customLog,
+					contextmenu: customLog,
+					pointerdown: customLog,
+					pointerup: customLog,
+					press: customLog,
+					presshold: customLog,
+					sweepright: customLog,
+					sweepleft: customLog,
+					touchcancel: customLog,
+					pointercancel: customLog,
+					// pointermove: customLog
+				});
+			}
+
+			bindAll('.parent-test-case-parent, .parent-test-case-child', 'parent-child');
+			bindAll('.propagation-parent, .propagation-child', 'propagation', function (event) {
+				event.stopPropagation();
+			});
+			bindAll('.prevent-default', 'prevent-default', function (event) {
+				if (/^pointer/.test(event.type)) {
+					event.preventDefault();
+				}
+			});
+			bindAll('.prevent-click', 'prevent-click', function (event) {
+				if (event.type === 'pointerdown') {
+					event.preventClick();
+				}
+			});
+			bindAll('.prevent-click-up', 'prevent-click-up', function (event) {
+				if (event.type === 'pointerup') {
+					event.preventClick();
+				}
+			});
+
+			// clear log utility
+			$('.clear-log').on('click', function () {
+				$(this).parent().find('> ul').empty();
+			});
+		});
+	</script>
+
+	<style text="text/css">
+	canvas { touch-action: none; -ms-touch-action: none; }
+	</style>
+</head>
+<body>
+	<strong>Please see the console on your device for extra logging information.</strong>
+
+	<h1 style="clear: both">Events on parent and child</h1>
+	<p>This is a test case where you're listening to a pointer event of a child element and a parent (such as on a link and the body).</p>
+	<div style="float: left" class="parent-test-case-parent">
+		<div style="background: blue; color: white; padding: 10px" class="parent-test-case-child">tap me to record activity</div>
+		<ul>
+			<li>mousedown or touchstart (2x)</li>
+			<li>pointerdown (2x)</li>
+			<li>mouseup or touchend (2x)</li>
+			<li>pointerup (2x)</li>
+			<li>press (2x)</li>
+			<li>click (2x)</li>
+		</ul>
+	</div>
+	<div style="float: right">
+		<button class="clear-log">clear</button>
+		<ul id="log-parent-child"></ul>
+	</div>
+
+	<br>
+	<br>
+
+	<h1 style="clear: both">Events on are canceled on parent by child</h1>
+	<p>This is a test case where you're listening to a pointer event of a child element and a parent (such as on a link and the body) and the child stops propagation.</p>
+	<div style="float: left" class="propagation-parent">
+		<div style="background: blue; color: white; padding: 10px" class="propagation-child">tap me to record activity</div>
+		<ul>
+			<li>mousedown or touchstart</li>
+			<li>pointerdown</li>
+			<li>mouseup or touchend</li>
+			<li>pointerup</li>
+			<li>press</li>
+			<li>click</li>
+		</ul>
+	</div>
+	<div style="float: right">
+		<button class="clear-log">clear</button>
+		<ul id="log-propagation"></ul>
+	</div>
+
+	<br>
+	<br>
+
+	<h1 style="clear: both">Prevent Default</h1>
+	<p>Prevent default is triggered on every pointer event. It should not prevent the native click event from triggering.</p>
+	<div style="float: left">
+		<a href="http://www.google.com" style="background: blue; color: white; padding: 10px" class="prevent-default">tap me to record activity</a>
+	</div>
+	<div style="float: right">
+		<button class="clear-log">clear</button>
+		<ul id="log-prevent-default"></ul>
+	</div>
+
+	<h1 style="clear: both">Prevent Click on pointerdown</h1>
+	<p>Prevent default is triggered on every pointer event. We attempt to prevent the native click event using the pointy.js utility.</p>
+	<div style="float: left">
+		<a href="http://www.google.com" style="background: blue; color: white; padding: 10px" class="prevent-click">tap me to record activity</a>
+	</div>
+	<div style="float: right">
+		<button class="clear-log">clear</button>
+		<ul id="log-prevent-click"></ul>
+	</div>
+
+	<h1 style="clear: both">Prevent Click on pointerup</h1>
+	<p>Prevent default is triggered on every pointer event. We attempt to prevent the native click event using the pointy.js utility.</p>
+	<div style="float: left">
+		<a href="http://www.google.com" style="background: blue; color: white; padding: 10px" class="prevent-click-up">tap me to record activity</a>
+	</div>
+	<div style="float: right">
+		<button class="clear-log">clear</button>
+		<ul id="log-prevent-click-up"></ul>
+	</div>
+</body>
+</html>

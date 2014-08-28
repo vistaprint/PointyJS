@@ -8,8 +8,14 @@
 	<script type="text/javascript">
 		function log(e, log)
 		{
-			var text = (+new Date) + ': ' + e.type + '|type:' + e.pointerType + '|id:' + e.pointerId + '|' + e.buttons;
+			var text = e.timeStamp + ': ' + e.type;
+
+			if (/^pointer/.test(e.type)) {
+				text += '|' + e.pointerType + '|' + e.pointerId + '|' + e.buttons;
+			}
+
 			$('<li>').text(text).appendTo($('#log-' + log));
+			console.log(e.target, e.type, e.pointerType, e);
 		}
 
 		$(function()
@@ -73,18 +79,23 @@
 				e.preventDefault();
 			}
 
+			var moveEvents = [];
+
 			function bindAll(el, logType) {
 				function customLog(e) {
 					log(e, logType);
 				}
 
+				moveEvents.push({
+					el: el,
+					func: customLog
+				});
+
 				return $(el).on({
 					touchstart: customLog,
-					// touchmove: customLog,
 					touchend: customLog,
 					mouseup: customLog,
 					mousedown: customLog,
-					// mousemove: customLog,
 					click: customLog,
 					dblclick: customLog,
 					contextmenu: customLog,
@@ -95,15 +106,24 @@
 					sweepright: customLog,
 					sweepleft: customLog,
 					touchcancel: customLog,
-					pointercancel: customLog //,
-					// pointermove: customLog
+					pointercancel: customLog
 				});
 			}
 
 			bindAll('#record', 'record');
 			bindAll('#bubble', 'bubble');
-			bindAll('#prevent-down', 'prevent-down').on('pointerdown', preventDefault);
-			bindAll('#prevent-up', 'prevent-up').on('pointerup', preventDefault);
+			bindAll('#prevent-click', 'prevent-click').on('pointerdown', function (e) { e.preventClick(); });
+			bindAll('#allow-navigation', 'allow-navigation');
+
+			$('#enableMoveEvents').on('click', function () {
+				$.each(moveEvents, function (i, o) {
+					$(o.el).on({
+						'touchmove': o.func,
+						'mousemove': o.func,
+						'pointermove': o.func
+					});
+				});
+			});
 
 			// clear log utility
 			$('.clear-log').on('click', function () {
@@ -117,6 +137,7 @@
 	</style>
 </head>
 <body>
+	<button id="enableMoveEvents">Listen to move events</button>
 	<h1>Draw on canvas</h1>
 	<div style="float: left">
 		<canvas id="canvas" width="300" height="300" style="border: 1px solid black;"></canvas>
@@ -138,7 +159,7 @@
 	<h1 style="clear: both">Bubbled event</h1>
 	<div style="float: left">
 		<div id="bubble">
-			<a href="#" style="background: blue; color: white; padding: 10px">tap me to record activity</a>
+			<a id="bubbleChild" href="#" style="background: blue; color: white; padding: 10px">tap me to record activity</a>
 		</div>
 	</div>
 	<div style="float: right">
@@ -146,26 +167,26 @@
 		<ul id="log-bubble"></ul>
 	</div>
 
-	<h1 style="clear: both">Prevent default on pointerdown</h1>
+	<h1 style="clear: both">PreventClick on Press</h1>
 	<div style="float: left">
-		<div id="prevent-down">
-			<a href="#" style="background: blue; color: white; padding: 10px">tap me to record activity</a>
+		<div id="prevent-click">
+			<a href="https://www.google.com/#q=it+did+not+prevent+click" style="background: blue; color: white; padding: 10px">tap me to record activity</a>
 		</div>
 	</div>
 	<div style="float: right">
 		<button class="clear-log">clear</button>
-		<ul id="log-prevent-down"></ul>
+		<ul id="log-prevent-click"></ul>
 	</div>
 
-	<h1 style="clear: both">Prevent default on pointerup</h1>
+	<h1 style="clear: both">Should Navigate (refresh page)</h1>
 	<div style="float: left">
-		<div id="prevent-up">
-			<a href="#" style="background: blue; color: white; padding: 10px">tap me to record activity</a>
+		<div id="allow-navigation">
+			<a href="" style="background: blue; color: white; padding: 10px">tap me to record activity</a>
 		</div>
 	</div>
 	<div style="float: right">
 		<button class="clear-log">clear</button>
-		<ul id="log-prevent-up"></ul>
+		<ul id="log-allow-navigation"></ul>
 	</div>
 </body>
 </html>

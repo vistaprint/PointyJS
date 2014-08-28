@@ -65,11 +65,11 @@
     </div>
     
 
-    <h2 id='pointygesturesjs'>pointy.gestures.js</h2>
+    <h2 id="pointygesturesjs">pointy.gestures.js</h2>
 
 <p>pointy.gestures.js is a set of jQuery custom events, built on top of pointer events, that support high-level, abstract gestures such as press, presshold, and sweep.</p>
 
-<h3 id='inclusion'>Inclusion</h3>
+<h3 id="inclusion">Inclusion</h3>
 
 <p>Include pointy.gestures.js immediately after pointy.js in your JavaScript bundle HTML page:</p>
 <div class='highlight'><pre><code class='html'><span class='c'>&lt;!-- pointy.js requires jQuery --&gt;</span>
@@ -79,33 +79,33 @@
 </code></pre></div>
 <p>The script must me loaded prior to binding to any pointer events of any element on the page.</p>
 
-<h2 id='events'>Events</h2>
+<h2 id="events">Events</h2>
 
-<h5 id='press'>press</h5>
+<h5 id="press">press</h5>
 
-<p>This event is fired after a quick, complete interaction event. This is similar to JQM&#8217;s <code>tap</code> event.</p>
+<p>This event is fired after a quick, complete interaction event. This is similar to JQM’s <code>tap</code> event.</p>
 
 <p>A <code>press</code> is determined immediately upon <code>pointerend</code>, and avoids the 300ms delay on touch devices. pointy.js internally determines the interaction to be complete.</p>
 
-<h5 id='presshold'>presshold</h5>
+<h5 id="presshold">presshold</h5>
 
-<p>This event is fired after a sustained, complete interaction event (sometimes referred to as a long press). This is similar to JQM&#8217;s <code>taphold</code>.</p>
+<p>This event is fired after a sustained, complete interaction event (sometimes referred to as a long press). This is similar to JQM’s <code>taphold</code>.</p>
 
 <p>A <code>presshold</code> is defined as a pointer being held in place without significant pointer movement for 750ms.</p>
 
 <p><code>$.event.special.press.pressholdThreshold</code> (default 750) - This value dictates how long (in ms) the user must hold their press before the <code>presshold</code> event is fired.</p>
 
-<h5 id='sweep'>sweep</h5>
+<h5 id="sweep">sweep</h5>
 
-<p>This event is fired when a horizontal drag occurs within a short duration. The event object will contain <code>direction</code> indicating right or left. This is similar to JQM&#8217;s <code>swipe</code> event.</p>
+<p>This event is fired when a horizontal drag occurs within a short duration. The event object will contain <code>direction</code> indicating right or left. This is similar to JQM’s <code>swipe</code> event.</p>
 
-<h5 id='sweepleft'>sweepleft</h5>
+<h5 id="sweepleft">sweepleft</h5>
 
-<p>This event is fired when a <code>sweep</code> event occurs moving in the left direction. This is similar to JQM&#8217;s <code>swipeleft</code> event.</p>
+<p>This event is fired when a <code>sweep</code> event occurs moving in the left direction. This is similar to JQM’s <code>swipeleft</code> event.</p>
 
-<h5 id='sweepright'>sweepright</h5>
+<h5 id="sweepright">sweepright</h5>
 
-<p>This event is fired when a <code>sweep</code> event occurs moving in the right direction. This is similar to JQM&#8217;s <code>swiperight</code> event.</p>
+<p>This event is fired when a <code>sweep</code> event occurs moving in the right direction. This is similar to JQM’s <code>swiperight</code> event.</p>
   </div>
 </div>
  
